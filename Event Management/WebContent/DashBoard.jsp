@@ -1,5 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@page import="com.DataBaseConnection.GetConnection"%>
+    <%-- <%@page import="com.mysql.jdbc.Connection"%> --%>
+  
+    <%@page import="java.sql.ResultSet"%>
+    <%@page import="java.sql.PreparedStatement"%>
+    <%@page import="java.sql.Connection"%>
+    <%@page import="java.sql.*"%>
+    <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+    
+ 
+    
+
+    
 <!DOCTYPE html>
 <html>
   <head>
@@ -49,7 +62,7 @@
         <!-- For Side Bar Toggle -->
         <!-- <a href="#" class="sidebar-toggler text-gray-500 mr-4 mr-lg-5 lead"><i class="fas fa-align-left"></i></a> -->
 
-        <a href="index.html" class="navbar-brand font-weight-bold text-uppercase text-base">Event Manager Dashboard</a>
+        <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base">Event Manager Dashboard  </a>
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
           <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1"><i class="fa fa-bell"></i><span class="notification-icon"></span></a>
             <div aria-labelledby="notifications" class="dropdown-menu"><a href="#" class="dropdown-item">
@@ -176,58 +189,72 @@
 
           <section>
             <div class="row">
-              <div class="col-lg-6">
+               <div class="col-lg-6">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="text-uppercase mb-0"><a href="past_events.html">Past Events</a></h6>
+                    <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">Upcoming/Ongoing Events</a></h6>
                   </div>
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  <c:set var="count" value="0" scope="page" />
+                  
                   <div class="card-body">                          
-                    <table class="table table-striped table-sm card-text">
+                    <table class="table table-striped table-md card-text">
+                    
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
+                          <th class="text-center">Sr.No</th>
+                          <th class="text-center">Event Name</th>
+                          <th class="text-center">Start Date</th>
+                          <th class="text-center">End Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter      </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">4</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">5</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">6</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter</td>
-                        </tr>
+                      <%
+		                  	Connection con 		 = null;
+                      		PreparedStatement st = null;
+		                  	ResultSet rs 		 = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = "select * from event_ledger where username= ? order by start_date asc limit 3";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		String Username =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		st.setString(1,Username);
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  %>
+		                  			
+		                  	
+		                  		<tr class="text-center">
+		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+		                          <td class="text-center"><%= rs.getString(2)  %></td>
+		                          <td class="text-center"><%= rs.getDate(7)  %></td>
+		                          <td class="text-center"><%= rs.getDate(8)  %></td>
+                       		 	</tr>
+		                  <% 	
+		                  		}
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		
+		                  	}
+                  	
+                 	 %>
+                 
+                      
                       </tbody>
                     </table>
                   </div>
@@ -239,53 +266,64 @@
                   <div class="card-header">
                     <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">Upcoming/Ongoing Events</a></h6>
                   </div>
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  <c:set var="count" value="0" scope="page" />
+                  
                   <div class="card-body">                          
-                    <table class="table table-striped table-sm card-text">
+                    <table class="table table-striped table-md card-text">
+                    
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
+                          <th class="text-center">Sr.No</th>
+                          <th class="text-center">Event Name</th>
+                          <th class="text-center">Start Date</th>
+                          <th class="text-center">End Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter      </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">4</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">5</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">6</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter</td>
-                        </tr>
+                      <%
+		                  	 con = null;
+		                  	 st = null;
+		                  	 rs = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = "select * from event_ledger order by start_date asc limit 5";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  %>
+		                  			
+		                  	
+		                  		<tr class="text-center">
+		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+		                          <td class="text-center"><%= rs.getString(2)  %></td>
+		                          <td class="text-center"><%= rs.getDate(7)  %></td>
+		                          <td class="text-center"><%= rs.getDate(8)  %></td>
+                       		 	</tr>
+		                  <% 	
+		                  		}
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		
+		                  	}
+                  	
+                 	 %>
+                 
+                      
                       </tbody>
                     </table>
                   </div>

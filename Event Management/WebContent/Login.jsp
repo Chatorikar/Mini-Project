@@ -30,6 +30,13 @@
   
   <body>
   <%@ page import="java.sql.*,javax.sql.*" %>
+  <%
+	  	response.setHeader("Cache-Control", "no-cache , no-store , must-revalidate" );
+		
+		response.setHeader("Progma", "no-cahce");
+		
+		response.setHeader("Expires", "0"); 
+	%>
     <div class="page-holder d-flex align-items-center">
       <div class="container">
         <div class="row align-items-center py-5">
