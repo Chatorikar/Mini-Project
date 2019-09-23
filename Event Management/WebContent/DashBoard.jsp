@@ -62,7 +62,7 @@
         <!-- For Side Bar Toggle -->
         <!-- <a href="#" class="sidebar-toggler text-gray-500 mr-4 mr-lg-5 lead"><i class="fas fa-align-left"></i></a> -->
 
-        <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base">Event Manager Dashboard  </a>
+        <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base">Event Manager ${username} </a>
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
           <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1"><i class="fa fa-bell"></i><span class="notification-icon"></span></a>
             <div aria-labelledby="notifications" class="dropdown-menu"><a href="#" class="dropdown-item">
@@ -94,7 +94,7 @@
             </div>
           </li>
           <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/user_icon.png" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"></a>
-            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">Mark Stephen</strong><small>Web Developer</small></a>
+            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">${username}</strong><small>Web Developer</small></a>
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Settings</a><a href="#" class="dropdown-item">Activity log       </a>
               <div class="dropdown-divider"></div><a href="Logout" class="dropdown-item">Logout</a>
             </div>
@@ -113,7 +113,7 @@
             <div id="pages" class="collapse">
               <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
                 <li class="sidebar-list-item"><a href="past_events.html" class="sidebar-link text-muted pl-lg-5">Past Events</a></li>
-                <li class="sidebar-list-item"><a href="upcoming_events.html" class="sidebar-link text-muted pl-lg-5">Current/Upcoming Events</a></li>
+                <li class="sidebar-list-item"><a href="upcoming_events.html" class="sidebar-link text-muted pl-lg-5">My Events</a></li>
             </div>
           </li>
               <li class="sidebar-list-item"><a href="login.html" class="sidebar-link text-muted"><i class="o-exit-1 mr-3 text-gray"></i><span>Login</span></a></li>
@@ -192,7 +192,7 @@
                <div class="col-lg-6">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">Upcoming/Ongoing Events</a></h6>
+                    <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">My Events</a></h6>
                   </div>
                   
                   
@@ -234,6 +234,7 @@
 		                  		rs = st.executeQuery();
 		                  		while(rs.next())
 		                  		{
+		                  			
 		                  %>
 		                  			
 		                  	
@@ -277,7 +278,7 @@
                   <c:set var="count" value="0" scope="page" />
                   
                   <div class="card-body">                          
-                    <table class="table table-striped table-md card-text">
+                    <table class="table table-striped table-md card-text table table-hover">
                     
                       <thead>
                         <tr>
@@ -289,31 +290,75 @@
                       </thead>
                       <tbody>
                       <%
-		                  	 con = null;
-		                  	 st = null;
-		                  	 rs = null;
-		                
+		                  	 con 				 = null;
+		                  	 st 				 = null;
+		                  	 rs 				 = null;
+		                  	 ResultSet rs_1 	 = null;
+		                  	 ResultSet row_num 	 = null;
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger order by start_date asc limit 5";
+		                  		String query_1 = "select * from event_ledger order by start_date asc limit 5";
+		                  		String  query_2 = "select * from (select * from event_ledger order by start_date limit 5) as t where t.username= ? ";
+		                  		String  query_3 = "select * from event_ledger where username = ? order by start_date limit 1 ";
 		                  		con = (Connection) GetConnection.getConnection();
-		                  		st = con.prepareStatement(sql);
+		                  		st = con.prepareStatement(query_1);
+		                  		PreparedStatement st_1 = con.prepareStatement(query_2);
+		                  		String username = (String)session.getAttribute("username");
+		                  		st_1.setString(1,username);
 		                  		
 		                  		rs = st.executeQuery();
-		                  		while(rs.next())
+		                  		rs_1 = st_1.executeQuery();
+		                  		int i = 1 , flag = 0;
+		                  		
+		                  		if(!rs_1.absolute(1))
 		                  		{
-		                  %>
+		                  			st_1 = con.prepareStatement(query_3);
+		                  			st_1.setString(1,(String)session.getAttribute("username"));
+		                  			rs_1 = st_1.executeQuery();
+		                  			st_1 = con.prepareStatement(query_3);
 		                  			
-		                  	
-		                  		<tr class="text-center">
-		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-		                          <td class="text-center"><%= rs.getString(2)  %></td>
-		                          <td class="text-center"><%= rs.getDate(7)  %></td>
-		                          <td class="text-center"><%= rs.getDate(8)  %></td>
-                       		 	</tr>
-		                  <% 	
+		                  		}else{
+		                  			i=6;
 		                  		}
+		                  		
+		                  		
+		                  		
+		                  		
+		                  		
+		                  		
+		                  		
+		                  		
+		                  		while(rs.next())
+			                  		{
+		                  				if(rs_1.absolute(1) && i == 5) {
+		                  					
+		                  					/*  if( rs_1.getString(1).equals(username) )*/
+			                  %>			
+					                  		<tr bgcolor="#FFF000"  class="text-center " >
+					                          <th bgcolor="#FFF000" scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+					                          <td bgcolor="#FFF000" class="text-center dark-2" ><%= rs_1.getString(2)  %></td>
+					                          <td bgcolor="#FFF000" class="text-center" ><%= rs_1.getDate(7)  %></td>
+					                          <td bgcolor="#FFF000" class="text-center"><%= rs_1.getDate(8)  %></td>
+			                       		 	</tr>
+			                  <% 	
+		                  				
+		                  				}
+		                  				else 
+		                  				{
+		                  					%>
+		                  					<tr  class="text-center">
+					                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+					                          <td class="text-center"><%= rs.getString(2)  %></td>
+					                          <td class="text-center"><%= rs.getDate(7)  %></td>
+					                          <td class="text-center"><%= rs.getDate(8)  %></td>
+					                          
+			                       		 	</tr>
+		                  					<% 
+		                  				}
+		                  				i++;
+			                  		}
+		                  		
 		                  		
 		                  	}
 		                  	catch(Exception ex)
