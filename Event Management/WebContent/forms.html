@@ -109,16 +109,23 @@
                     <form class="form-horizontal" onsubmit="validate(0)">
                       <div class="form-group row">
                         <label class="col-md-3 form-control-label">Event Name</label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="ename" onblur="validate(1)"><label class="form-text text-muted ml-3"></label>
+                        <div class="col-md-7">
+                          <input type="text" class="form-control" id="ename" onblur="validate(1)">
+                        </div>
+                        <div class="col-md-1" id="info1" style="display: none;">
+                        	<img src="img/alert.png" style="max-width: 1.5rem;" class="img-fluid rounded-circle shadow" data-toggle="popover" data-content="This field is Required!">
                         </div>
                       </div>
 
                       <div class="line"></div>
                       <div class="form-group row">
                         <label class="col-md-3 form-control-label">Event Description</label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="edes" onblur="validate(2)"><small class="form-text text-muted ml-3">Provide full description of the Event for approval.</small>
+                        <div class="col-md-7">
+                          <textarea type="text" class="form-control" id="edes" onblur="validate(2)" style="height: calc(2.25rem + 150px);"></textarea>
+                          <small class="form-text text-muted ml-3">Provide full description of the Event for approval.</small>
+                        </div>
+                        <div class="col-md-1" id="info2" style="display: none;">
+                        	<img src="img/alert.png" style="max-width: 1.5rem;" class="img-fluid rounded-circle shadow" data-toggle="popover" data-content="This field is Required!">
                         </div>
                       </div>
 
@@ -126,16 +133,22 @@
                       <div class="line"></div>
                       <div class="form-group row">
                         <label class="col-md-3 form-control-label">Event Start Date</label>
-                        <div class="col-md-3">
-                          <input type="date" class="form-control" id="date1" onblur="validate(3)">
+                        <div class="col-md-2">
+                          <input type="date" class="form-control" id="date1" onblur="validate(3)" style="width:100%;">
+                        </div>
+                        <div class="col-md-1" id="info3" style="display: none;" data-placement="left">
+                        	<img src="img/alert.png" style="max-width: 1.5rem;" id="start_date" class="img-fluid rounded-circle shadow" data-toggle="popover" data-placement="left">
                         </div>
                       </div>
 
                       <!-- Event End Date -->
                       <div class="form-group row">
                         <label class="col-md-3 form-control-label">Event End Date</label>
-                        <div class="col-md-3">
-                          <input type="date" class="form-control" id="date2" onblur="validate(4)">
+                        <div class="col-md-2">
+                          <input type="date" class="form-control" id="date2" onblur="validate(4)" style="width:100%;">
+                        </div>
+                        <div class="col-md-5" id="info4" style="display: none;" data-placement="left">
+                        	<img src="img/alert.png" style="max-width: 1.3rem;" id="end_date" class="img-fluid rounded-circle shadow" data-toggle="popover" data-placement="left">
                         </div>
                       </div>
 
@@ -150,15 +163,18 @@
                             <option>Student</option>
                           </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                         	<input type="text" class="form-control" placeholder="Name" id="org" onblur="validate(5)">
+                        </div>
+                        <div class="col-md-1" id="info5" style="display: none;">
+                        	<img src="img/alert.png" style="max-width: 1.5rem;" class="img-fluid rounded-circle shadow" data-toggle="popover" data-content="This field is Required!">
                         </div>
                       </div>
 
                       <div class="line"></div>
                       <div class="form-group row">
                         <div class="col-md-9 ml-auto">
-                          <button type="clear" class="btn btn-secondary">Clear</button>
+                          <button type="reset" class="btn btn-secondary">Clear</button>
                           <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                       </div>
@@ -203,59 +219,101 @@
             d1 = document.getElementById("date1");
             d2 = document.getElementById("date2");
             org = document.getElementById("org");
+            info1 = document.getElementById("info1");
+            info2 = document.getElementById("info2");
+            info3 = document.getElementById("info3");
+            info4 = document.getElementById("info4");
+            info5 = document.getElementById("info5");
+            start_d = document.querySelector("#start_date");
+            end_d = document.querySelector("#end_date");
+            today = Date();
+            selectStart = Date(d1);
 
             if(val >= 1 || val == 0) {
 	            if (ename.value == "") {
 	                ename.style.borderColor = "red";
+	                info1.style.display = "block";
 	                flag = true;
 	            } else {
 	                ename.style.borderColor = "green";
+	                info1.style.display = "none";
 	            }
 	        }
 
 	        if(val >= 2 || val == 0) {
 	            if (edes.value == "") {
 	                edes.style.borderColor = "red";
+	                info2.style.display = "block";
 	                flag = true;
 	            } else {
 	                edes.style.borderColor = "green";
+	                info2.style.display = "none";
 	            }
 	        }
 
 	        if(val >= 3 || val == 0) {
 	            if (d1.value == "") {
 	                d1.style.borderColor = "red";
+	                info3.style.display = "block";
+	                start_d.setAttribute("data-content", "This field is Required!");
 	                flag = true;
-	            } else {
+	            }
+	            else if(selectStart < today) {
+	            	d1.style.borderColor = "red";
+	                info3.style.display = "block";
+	                start_d.setAttribute("data-content", "Invalid Start Date!");
+	                flag = true;
+	            }
+	            else {
 	                d1.style.borderColor = "green";
+	                info3.style.display = "none";
 	            }
 	        }
 
 	        if(val >= 4 || val == 0) {
 	            if (d2.value == "") {
 	                d2.style.borderColor = "red";
+	                info4.style.display = "block";
+	                end_d.setAttribute("data-content", "This field is Required!");
 	                flag = true;
-	            } else {
+	            } 
+	            else if(d2.value < d1.value) {
+	            	d2.style.borderColor = "red";
+	                info4.style.display = "block";
+	                end_d.setAttribute("data-content", "Invalid End Date!");
+	                flag = true;
+	            }
+	            else {
 	                d2.style.borderColor = "green";
+	                info4.style.display = "none";
 	            }
 	        }
 
 	        if(val >= 5 || val == 0) {
 	            if (org.value == "") {
 	                org.style.borderColor = "red";
+	                info5.style.display = "block";
 	                flag = true;
 	            } else {
 	                org.style.borderColor = "green";
+	                info5.style.display = "none";
 	            }
 	        }
 
             if (flag) {
-                document.getElementById("req").innerHTML = "Please Fill all the Details..!!";
+                // document.getElementById("req").innerHTML = "Please Fill all the Details..!!";
                 document.getElementById("req").style.color = "red";
             }
 
             event.preventDefault();
         }
+
+        $(document).ready(function(){
+		    $('[data-toggle="popover"]').popover({
+		        placement : 'bottom',
+		        trigger : 'hover'
+		    });
+		});
     </script>
   </body>
 </html>

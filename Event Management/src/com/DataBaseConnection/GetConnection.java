@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class GetConnection 
 {
-    private static String url = "jdbc:mysql://localhost:3306/Event_Management";
+    private static String url = "jdbc:mysql://localhost:3306/Event_Management?useSSL=false";
     private static String Driver = "com.mysql.jdbc.Driver";   
     private static String username = "pratham";   
     private static String password = "1";

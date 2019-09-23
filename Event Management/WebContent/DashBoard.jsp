@@ -108,7 +108,7 @@
         <ul class="sidebar-menu list-unstyled">
               <li class="sidebar-list-item"><a href="index.html" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
               <!-- <li class="sidebar-list-item"><a href="tables.html" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Tables</span></a></li> -->
-              <li class="sidebar-list-item"><a href="forms.html" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
+              <li class="sidebar-list-item"><a href="form.jsp" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
           <li class="sidebar-list-item"><a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted"><i class="o-wireframe-1 mr-3 text-gray"></i><span>Events</span></a>
             <div id="pages" class="collapse">
               <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
@@ -224,7 +224,7 @@
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where username= ? order by start_date asc limit 3";
+		                  		String sql = "select * from event_ledger where username= ? order by start_date asc limit 5";
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");
@@ -299,17 +299,32 @@
 		                  	try
 		                  	{
 		                  		String query_1 = "select * from event_ledger order by start_date asc limit 5";
+		                  		
 		                  		String  query_2 = "select * from (select * from event_ledger order by start_date limit 5) as t where t.username= ? ";
+		                  		
 		                  		String  query_3 = "select * from event_ledger where username = ? order by start_date limit 1 ";
+		                  		
 		                  		con = (Connection) GetConnection.getConnection();
+		                  		
 		                  		st = con.prepareStatement(query_1);
+		                  		
 		                  		PreparedStatement st_1 = con.prepareStatement(query_2);
+		                  		
 		                  		String username = (String)session.getAttribute("username");
+		                  		
 		                  		st_1.setString(1,username);
 		                  		
 		                  		rs = st.executeQuery();
+		                  		
 		                  		rs_1 = st_1.executeQuery();
+		                  		
 		                  		int i = 1 , flag = 0;
+		                  		
+		                  		// rs_1.absolute(1) ==> True if it has some record ==> User having event in top 5 event 
+		                  		
+		                  		// rs_1.absolute(1) ==> Fasle if it is an empty set ==> 
+		                  		// We have to find First Upcoming Event of a user to show it in last record in Upcoming/OnGoing table ===> 
+		                  		// So we have to fetch it's details. 
 		                  		
 		                  		if(!rs_1.absolute(1))
 		                  		{
@@ -321,11 +336,6 @@
 		                  		}else{
 		                  			i=6;
 		                  		}
-		                  		
-		                  		
-		                  		
-		                  		
-		                  		
 		                  		
 		                  		
 		                  		
@@ -342,10 +352,11 @@
 					                          <td bgcolor="#FFF000" class="text-center"><%= rs_1.getDate(8)  %></td>
 			                       		 	</tr>
 			                  <% 	
-		                  				
 		                  				}
 		                  				else 
-		                  				{
+		                  				{	
+		                  					if(!username.equals(rs.getString(4)))
+		                  					{
 		                  					%>
 		                  					<tr  class="text-center">
 					                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
@@ -355,20 +366,28 @@
 					                          
 			                       		 	</tr>
 		                  					<% 
+		                  					}
+		                  					else{
+			                  					
+			                  					/*  if( rs_1.getString(1).equals(username) )*/
+				                  %>			
+						                  		<tr bgcolor="#FFF000"  class="text-center " >
+						                          <th bgcolor="#FFF000" scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+						                          <td bgcolor="#FFF000" class="text-center dark-2" ><%= rs.getString(2)  %></td>
+						                          <td bgcolor="#FFF000" class="text-center" ><%= rs.getDate(7)  %></td>
+						                          <td bgcolor="#FFF000" class="text-center"><%= rs.getDate(8)  %></td>
+				                       		 	</tr>
+				                  <% 	
+			                  				}
 		                  				}
 		                  				i++;
-			                  		}
-		                  		
-		                  		
+			                  		}		                  		
 		                  	}
 		                  	catch(Exception ex)
 		                  	{
 		                  		
 		                  	}
-                  	
                  	 %>
-                 
-                      
                       </tbody>
                     </table>
                   </div>
