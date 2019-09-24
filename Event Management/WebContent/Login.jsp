@@ -44,7 +44,7 @@
             <h1 class="text-base text-primary text-uppercase mb-4">Event Manager Dashboard</h1>
             <h2 class="mb-4">Welcome back!</h2>
             <p class="text-muted">Organize all Events is Systematic Manner</p>
-            <form id="loginForm" action="Login" class="mt-4">
+            <form id="loginForm" action="Login" class="mt-4" method="post">
 
               <div class="form-group mb-4">
                 <input type="text" name="uname" placeholder="Username or Email address" class="form-control border-0 shadow form-control-lg">

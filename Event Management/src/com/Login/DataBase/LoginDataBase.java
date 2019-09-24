@@ -2,8 +2,6 @@ package com.Login.DataBase;
 
 import java.sql.ResultSet;
 
-
-
 import com.DataBaseConnection.GetConnection;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -18,7 +16,7 @@ public class LoginDataBase {
 	
 	String sql = "select * from users where username=? and password=? ";
 	
-	public boolean check(String uname , String pass)
+	public int check(String uname , String pass)
 	{
 		try
 		{
@@ -30,9 +28,9 @@ public class LoginDataBase {
 			
 			ResultSet rs = st.executeQuery();
 			
-			if(rs.next())
+			if(rs.absolute(1))
 			{
-				return true;
+				return rs.getInt(3);		// Return Access Level if Match Found
 			}
 			
 		}catch (Exception e) {
@@ -41,6 +39,6 @@ public class LoginDataBase {
 			e.printStackTrace();
 		}
 		
-		return false;
+		return -1;
 	}
 }
