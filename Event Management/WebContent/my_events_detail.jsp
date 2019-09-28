@@ -1,3 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@page import="com.DataBaseConnection.GetConnection"%>
+    <%-- <%@page import="com.mysql.jdbc.Connection"%> --%>
+  
+    <%@page import="java.sql.ResultSet"%>
+    <%@page import="java.sql.PreparedStatement"%>
+    <%@page import="java.sql.Connection"%>
+    <%@page import="java.sql.*"%>
+    <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+    
+ 
+    
+
+    
 <!DOCTYPE html>
 <html>
   <head>
@@ -23,9 +38,21 @@
     <link rel="shortcut icon" href="img/logo.png">
   </head>
   <body>
-
-    <!-----Nav-Bar--------------------------------------------------------------------------------------------->
-
+		  <%
+		
+			response.setHeader("Cache-Control", "no-cache , no-store , must-revalidate" );
+		
+			response.setHeader("Progma", "no-cahce");
+			
+			response.setHeader("Expires", "0");
+			
+			if(session.getAttribute("username") == null)
+			{
+				response.sendRedirect("Login.jsp");
+			}
+		
+		%>
+    <!-- navbar-->
     <header class="header">
       <nav class="navbar navbar-expand-lg px-4 py-2 bg-white shadow">
 
@@ -35,7 +62,7 @@
         <!-- For Side Bar Toggle -->
         <!-- <a href="#" class="sidebar-toggler text-gray-500 mr-4 mr-lg-5 lead"><i class="fas fa-align-left"></i></a> -->
 
-        <a href="index.html" class="navbar-brand font-weight-bold text-uppercase text-base">Event Manager Dashboard</a>
+        <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base "><font size="4.6">Welcome  ${username} </font>  </a>
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
           <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1"><i class="fa fa-bell"></i><span class="notification-icon"></span></a>
             <div aria-labelledby="notifications" class="dropdown-menu"><a href="#" class="dropdown-item">
@@ -66,30 +93,30 @@
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item text-center"><small class="font-weight-bold headings-font-family text-uppercase">View all notifications</small></a>
             </div>
           </li>
-          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/user_icon.png" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"></a>
-            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">Mark Stephen</strong><small>Web Developer</small></a>
+          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/Dp.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
+            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">${username}</strong><small>Web Developer</small></a>
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Settings</a><a href="#" class="dropdown-item">Activity log       </a>
-              <div class="dropdown-divider"></div><a href="login.html" class="dropdown-item">Logout</a>
+              <div class="dropdown-divider"></div><a href="Logout" class="dropdown-item">Logout</a>
             </div>
           </li>
         </ul>
       </nav>
     </header>
-
     <div class="d-flex align-items-stretch">
 
       <!-----Side-Bar--------------------------------------------------------------------------------------------->
-      
+
       <div id="sidebar" class="sidebar py-3">
         <ul class="sidebar-menu list-unstyled">
-              <li class="sidebar-list-item"><a href="index.html" class="sidebar-link text-muted"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
+              <li class="sidebar-list-item"><a href="DashBoard.jsp" class="sidebar-link text-muted"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
               <!-- <li class="sidebar-list-item"><a href="tables.html" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Tables</span></a></li> -->
               <li class="sidebar-list-item"><a href="forms.html" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
           <li class="sidebar-list-item"><a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted active"><i class="o-wireframe-1 mr-3 text-gray"></i><span>Events</span></a>
             <div id="pages" class="collapse">
               <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
                 <li class="sidebar-list-item"><a href="past_events.html" class="sidebar-link text-muted pl-lg-5">Past Events</a></li>
-                <li class="sidebar-list-item"><a href="upcoming_events.html" class="sidebar-link text-muted pl-lg-5">My Events</a></li>
+                <li class="sidebar-list-item"><a href="my_events.html" class="sidebar-link text-muted pl-lg-5">My Events</a></li>
+              </ul>
             </div>
           </li>
               <li class="sidebar-list-item"><a href="login.html" class="sidebar-link text-muted"><i class="o-exit-1 mr-3 text-gray"></i><span>Login</span></a></li>
@@ -101,48 +128,92 @@
       <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
 
-          <!-----My-Past-Events--------------------------------------------------------------------------------------------->
-
           <section class="py-5">
             <div class="row">
               <div class="col-lg-12 mb-4">
-                <div class="card">
-                  <div class="card-header">
-                    <h6 class="text-uppercase mb-0">My Past Events</h6>
+
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="h6 text-uppercase mb-0">Event Name</h3>
+                    </div>
+
+                    <div class="card-body">
+
+                      <h5><span>Approved/Rejected</span> By</h5>
+                      <br>
+                      <p>Head Organiser</p>
+                      <p>Event Description</p>
+                      <p>Start Date</p>
+                      <p>End Date</p>
+                      <br>
+
+                      <button type="button" data-toggle="modal" data-target="#myModal1" class="btn-sm btn-info">Message</button>
+                      <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                        <div role="document" class="modal-dialog modal-lg">
+                          <div class="modal-content">
+
+                            <div class="modal-header">
+                              <h4 id="exampleModalLabel" class="modal-title">Messaging</h4>
+                              <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                            </div>
+
+                            <div class="modal-body">
+                              <form action="#">
+                                <br>
+                                <div class="form-group">
+                                  <label>Message</label>
+                                  <textarea type="textarea" class="form-control"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                  <input type="submit" value="Close" class="btn btn-default" data-dismiss="modal">
+                                  <input type="submit" value="Send" class="btn btn-primary">
+                                </div>
+                              </form>
+
+                              <section class="py-2"></section>
+
+                              <section>
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="card mb-lg-0">         
+                                      <div class="card-header">
+                                        <h2 class="h6 mb-0 text-uppercase">Sender</h2>
+                                      </div>
+                                      <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+
+                              <section class="py-2"></section>
+
+                              <section>
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="card mb-lg-0">         
+                                      <div class="card-header">
+                                        <h2 class="h6 mb-0 text-uppercase">Sender</h2>
+                                      </div>
+                                      <div class="card-body">Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <button class="btn-sm btn-primary">Proceed</button>
+
+                    </div>
                   </div>
-                  <div class="card-body">                           
-                    <table class="table table-striped card-text">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </section>
@@ -163,6 +234,7 @@
             </div>
           </div>
         </footer>
+
       </div>
     </div>
     <!-- JavaScript files-->
