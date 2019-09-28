@@ -106,7 +106,7 @@
     <div class="d-flex align-items-stretch">
       <div id="sidebar" class="sidebar py-3">
         <ul class="sidebar-menu list-unstyled">
-              <li class="sidebar-list-item"><a href="index.html" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
+              <li class="sidebar-list-item"><a href="DashBoard.jsp" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
               <!-- <li class="sidebar-list-item"><a href="tables.html" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Tables</span></a></li> -->
               <li class="sidebar-list-item"><a href="form.jsp" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
           <li class="sidebar-list-item"><a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted"><i class="o-wireframe-1 mr-3 text-gray"></i><span>Events</span></a>
@@ -119,74 +119,95 @@
               <li class="sidebar-list-item"><a href="login.html" class="sidebar-link text-muted"><i class="o-exit-1 mr-3 text-gray"></i><span>Login</span></a></li>
         </ul>
       </div>
-
       <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
-
-          <section class="py-4">
-          </section>
-
-          <section>
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="card mb-5 mb-lg-0">         
+			
+		          <section class="py-5">
+           <div class="row">
+              <div class="col-lg-12 mb-4">
+                <div class="card">
                   <div class="card-header">
-                    <h2 class="h6 mb-0 text-uppercase">Recent Messages from Authority</h2>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6 class="text-uppercase mb-0">My Events</h6>
+                      </div>
+                      <div class="col-md-5 text-right">
+                        <a href="my_events.jsp"><h6 class="text-uppercase mb-0">View All</h6></a>
+                      </div>
+                    </div>
                   </div>
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start align-items-sm-center mb-4 flex-column flex-sm-row">
-                      <div class="left d-flex align-items-center">
-                        <div class="icon icon-lg shadow mr-3 text-gray"><i class="fab fa-dropbox"></i></div>
-                        <div class="text">
-                          <h6 class="mb-0 d-flex align-items-center"> <span>Dropbox Inc.</span><span class="dot dot-sm ml-2 bg-violet"></span></h6><small class="text-gray">Account renewal</small>
-                        </div>
-                      </div>
-                      <div class="right ml-5 ml-sm-0 pl-3 pl-sm-0 text-violet">
-                        <h5>-$20</h5>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-start align-items-sm-center mb-4 flex-column flex-sm-row">
-                      <div class="left d-flex align-items-center">
-                        <div class="icon icon-lg shadow mr-3 text-gray"><i class="fab fa-apple"></i></div>
-                        <div class="text">
-                          <h6 class="mb-0 d-flex align-items-center"> <span>App Store.</span><span class="dot dot-sm ml-2 bg-green"></span></h6><small class="text-gray">Software cost</small>
-                        </div>
-                      </div>
-                      <div class="right ml-5 ml-sm-0 pl-3 pl-sm-0 text-green">
-                        <h5>-$20</h5>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-start align-items-sm-center mb-4 flex-column flex-sm-row">
-                      <div class="left d-flex align-items-center">
-                        <div class="icon icon-lg shadow mr-3 text-gray"><i class="fas fa-shopping-basket"></i></div>
-                        <div class="text">
-                          <h6 class="mb-0 d-flex align-items-center"> <span>Supermarket.</span><span class="dot dot-sm ml-2 bg-blue"></span></h6><small class="text-gray">Shopping</small>
-                        </div>
-                      </div>
-                      <div class="right ml-5 ml-sm-0 pl-3 pl-sm-0 text-blue">
-                        <h5>-$20</h5>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-start align-items-sm-center mb-4 flex-column flex-sm-row">
-                      <div class="left d-flex align-items-center">
-                        <div class="icon icon-lg shadow mr-3 text-gray"><i class="fab fa-android"></i></div>
-                        <div class="text">
-                          <h6 class="mb-0 d-flex align-items-center"> <span>Play Store.</span><span class="dot dot-sm ml-2 bg-red"></span></h6><small class="text-gray">Software cost</small>
-                        </div>
-                      </div>
-                      <div class="right ml-5 ml-sm-0 pl-3 pl-sm-0 text-red">
-                        <h5>-$20</h5>
-                      </div>
-                    </div>
+                  
+                  <div class="card-body">                           
+                 <table class="table table-striped table-md card-text">
+                    
+                      <thead>
+                        <tr>
+                          <th class="text-center">Sr.No</th>
+                          <th class="text-center">Event Name</th>
+                          <th class="text-center">Start Date</th>
+                          <th class="text-center">End Date</th>
+                          <th class="text-center">Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <%
+                      		Connection con = null;
+                      		PreparedStatement st  = null;
+                      		ResultSet rs  = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = "select * from event_ledger where username= ? and status_level = 1 order by start_date desc limit 5";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		String Username =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		st.setString(1,Username);
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  			
+		                  %>
+		                  			
+		                  	
+		                  		<tr class="text-center">
+		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+		                          <td class="text-center"><%= rs.getString(2)  %></td>
+		                          <td class="text-center"><%= rs.getDate(7)  %></td>
+		                          <td class="text-center"><%= rs.getDate(8)  %></td>
+		                          <td><a href="my_events_detail.jsp"><button class="btn-sm btn-primary">View</button></a></td>
+		                          
+                       		 	</tr>
+		                  <% 	
+		                  		}
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		
+		                  	}
+                  	
+                 	 %>
+                 
+                      
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
           </section>
+		
+			
+        <!--   <section class="py-4">
+          </section> -->
 
-          <section class="py-3">
+
+<!--           <section class="py-3">
           </section>
-
+ -->
           <section>
             <div class="row">
                <div class="col-lg-6">
@@ -217,14 +238,14 @@
                       </thead>
                       <tbody>
                       <%
-		                  	Connection con 		 = null;
-                      		PreparedStatement st = null;
-		                  	ResultSet rs 		 = null;
+		                  	 con = null;
+                      		 st  = null;
+		                  	 rs  = null;
 		                
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where username= ? order by start_date asc limit 5";
+		                  		String sql = "select * from event_ledger where username= ? order by start_date desc limit 5";
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");
@@ -298,95 +319,51 @@
 		                   	
 		                  	try
 		                  	{
-		                  		String query_1 = "select * from event_ledger order by start_date asc limit 5";
-		                  		
-		                  		String  query_2 = "select * from (select * from event_ledger order by start_date limit 5) as t where t.username= ? ";
-		                  		
-		                  		String  query_3 = "select * from event_ledger where username = ? order by start_date limit 1 ";
-		                  		
+		                  		String username = (String)session.getAttribute("username");
+		                  				                  		
+		                  		String query_1 = "call getUserEventStatus(?)";
+		                  				                  		
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		
 		                  		st = con.prepareStatement(query_1);
 		                  		
-		                  		PreparedStatement st_1 = con.prepareStatement(query_2);
-		                  		
-		                  		String username = (String)session.getAttribute("username");
-		                  		
-		                  		st_1.setString(1,username);
+		                  		st.setString(1,username);
 		                  		
 		                  		rs = st.executeQuery();
-		                  		
-		                  		rs_1 = st_1.executeQuery();
-		                  		
-		                  		int i = 1 , flag = 0;
-		                  		
-		                  		// rs_1.absolute(1) ==> True if it has some record ==> User having event in top 5 event 
-		                  		
-		                  		// rs_1.absolute(1) ==> Fasle if it is an empty set ==> 
-		                  		// We have to find First Upcoming Event of a user to show it in last record in Upcoming/OnGoing table ===> 
-		                  		// So we have to fetch it's details. 
-		                  		
-		                  		if(!rs_1.absolute(1))
-		                  		{
-		                  			st_1 = con.prepareStatement(query_3);
-		                  			st_1.setString(1,(String)session.getAttribute("username"));
-		                  			rs_1 = st_1.executeQuery();
-		                  			st_1 = con.prepareStatement(query_3);
-		                  			
-		                  		}else{
-		                  			i=6;
-		                  		}
-		                  		
-		                  		
+		                
 		                  		
 		                  		while(rs.next())
-			                  		{
-		                  				if(rs_1.absolute(1) && i == 5) {
-		                  					
-		                  					/*  if( rs_1.getString(1).equals(username) )*/
-			                  %>			
-					                  		<tr bgcolor="#FFF000"  class="text-center " >
-					                          <th bgcolor="#FFF000" scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-					                          <td bgcolor="#FFF000" class="text-center dark-2" ><%= rs_1.getString(2)  %></td>
-					                          <td bgcolor="#FFF000" class="text-center" ><%= rs_1.getDate(7)  %></td>
-					                          <td bgcolor="#FFF000" class="text-center"><%= rs_1.getDate(8)  %></td>
-			                       		 	</tr>
-			                  <% 	
-		                  				}
-		                  				else 
-		                  				{	
-		                  					if(!username.equals(rs.getString(4)))
-		                  					{
-		                  					%>
-		                  					<tr  class="text-center">
-					                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-					                          <td class="text-center"><%= rs.getString(2)  %></td>
-					                          <td class="text-center"><%= rs.getDate(7)  %></td>
-					                          <td class="text-center"><%= rs.getDate(8)  %></td>
-					                          
-			                       		 	</tr>
-		                  					<% 
-		                  					}
-		                  					else{
-			                  					
-			                  					/*  if( rs_1.getString(1).equals(username) )*/
-				                  %>			
-						                  		<tr bgcolor="#FFF000"  class="text-center " >
-						                          <th bgcolor="#FFF000" scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-						                          <td bgcolor="#FFF000" class="text-center dark-2" ><%= rs.getString(2)  %></td>
-						                          <td bgcolor="#FFF000" class="text-center" ><%= rs.getDate(7)  %></td>
-						                          <td bgcolor="#FFF000" class="text-center"><%= rs.getDate(8)  %></td>
-				                       		 	</tr>
-				                  <% 	
-			                  				}
-		                  				}
-		                  				i++;
-			                  		}		                  		
+		                  		{ 
+		                  			if(!username.equals(rs.getString(3)))
+		                  			{
+		                  %>
+				                  		<tr class="text-center">
+				                          <th scope="row"><%= rs.getString(1)  %> </th>
+				                          <td class="text-center"><%= rs.getString(2)  %></td>
+				                          <td class="text-center"><%= rs.getDate(4)  %></td>
+				                          <td class="text-center"><%= rs.getDate(5)  %></td>
+				                          
+		                       		 	</tr>
+		                  <% 	
+		                  			}
+		                  			else
+		                  			{
+		                  %>
+				                  		<tr bgcolor="#FFF000"  class="text-center">
+				                          <th scope="row"><%= rs.getString(1)  %> </th>
+				                          <td class="text-center"><%= rs.getString(2)  %></td>
+				                          <td class="text-center"><%= rs.getDate(4)  %></td>
+				                          <td class="text-center"><%= rs.getDate(5)  %></td>
+		                       		 	</tr>
+		                  <% 	
+		                  			}
+		                  		}			                  		
 		                  	}
 		                  	catch(Exception ex)
 		                  	{
 		                  		
 		                  	}
+                  	
                  	 %>
                       </tbody>
                     </table>

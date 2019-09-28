@@ -178,6 +178,7 @@
                           <td style="display: none;" ><%= rs.getString(3)  %></td>
                           <td style="display: none;" ><%= rs.getDate(7)  %></td>
                           <td style="display: none;" ><%= rs.getDate(8)  %></td>
+                          <td style="display: none;" ><%= rs.getInt(1)  %></td>
                           <td>
                             <button type="button" data-toggle="modal" data-target="#myModal1" class="btn-sm btn-info">Message</button>
                             <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
@@ -259,15 +260,15 @@
                                   <p>Event Description : <span id="Event_Description"></span></p>
 	
 	
-                                  <form action="#">
+                                  <form action="Principal_Decision" method="post">
                                     <br>
                                     <div class="form-group">
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input">
+                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input" value="1" required>
                                         <label for="customRadioInline1" class="custom-control-label"><h4>Accept</h4></label>
                                       </div>
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input">
+                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input"  value="2">
                                         <label for="customRadioInline2" class="custom-control-label"><h4>Reject</h4></label>
                                       </div>
                                     </div>
@@ -278,10 +279,10 @@
                                       <textarea type="textarea" class="form-control"></textarea>
                                       <small class="form-text text-muted ml-3">Any Message for the Organiser.</small>
                                     </div>
-
+									
                                     <br>
                                     <div class="form-group">
-                                      <input type="submit" value="Send" class="btn btn-primary" data-dismiss="modal">
+                                    <button type="submit" id="submit_btn" class="btn btn-primary pull-right my-2" style="float:right;" name="submit"  > Submit</button>
                                     </div>
                                   </form>
 
@@ -495,7 +496,7 @@
         // code to read selected table row cell data (values).
         $("#myTable").on('click','#details',function(){
              // get the current row
-             var currentRow=$(this).closest("tr"); 
+             var currentRow=$(this).closest("tr"); 	
              
              var col1=currentRow.find("td:eq(0)").text();
              var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
@@ -503,6 +504,7 @@
              var col4=currentRow.find("td:eq(3)").text(); // get current row 3rd TD
              var col5=currentRow.find("td:eq(4)").text(); // get current row 3rd TD
              var col6=currentRow.find("td:eq(5)").text(); // get current row 3rd TD
+             var col7=currentRow.find("td:eq(6)").text(); // get current row 3rd TD
            
              $("#Event_Name").html(col2);
              $("#Head_Organizer_Name").html(col1);
@@ -510,6 +512,8 @@
              $("#End_Date").html(col5);
              $("#Event_Description").html(col3);
            
+             $("#submit_btn").val(col6);
+           	
              
         });
     });
