@@ -36,8 +36,6 @@
     <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/logo.png">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    
   </head>
   <body>
 		  <%
@@ -64,7 +62,7 @@
         <!-- For Side Bar Toggle -->
         <!-- <a href="#" class="sidebar-toggler text-gray-500 mr-4 mr-lg-5 lead"><i class="fas fa-align-left"></i></a> -->
 
-        <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base" ><font size="4.6">Welcome ${username} , sir</font> </a>
+        <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base "><font size="4.6">Welcome  ${username} </font>  </a>
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
           <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1"><i class="fa fa-bell"></i><span class="notification-icon"></span></a>
             <div aria-labelledby="notifications" class="dropdown-menu"><a href="#" class="dropdown-item">
@@ -95,7 +93,7 @@
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item text-center"><small class="font-weight-bold headings-font-family text-uppercase">View all notifications</small></a>
             </div>
           </li>
-          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/principal.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
+          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/Dp.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
             <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">${username}</strong><small>Web Developer</small></a>
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Settings</a><a href="#" class="dropdown-item">Activity log       </a>
               <div class="dropdown-divider"></div><a href="Logout" class="dropdown-item">Logout</a>
@@ -105,12 +103,17 @@
       </nav>
     </header>
 
+
     <div class="d-flex align-items-stretch">
+
+      <!-----Side-Bar--------------------------------------------------------------------------------------------->
+
       <div id="sidebar" class="sidebar py-3">
         <ul class="sidebar-menu list-unstyled">
               <li class="sidebar-list-item"><a href="index.html" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
               <!-- <li class="sidebar-list-item"><a href="tables.html" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Tables</span></a></li> -->
-              <li class="sidebar-list-item"><a href="form.jsp" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
+              <li class="sidebar-list-item"><a href="forms.html" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
+              <li class="sidebar-list-item"><a href="eventProp.html" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>Event Proposals</span></a></li>
           <li class="sidebar-list-item"><a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted"><i class="o-wireframe-1 mr-3 text-gray"></i><span>Events</span></a>
             <div id="pages" class="collapse">
               <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
@@ -122,22 +125,20 @@
         </ul>
       </div>
 
+      <!-----Updates--------------------------------------------------------------------------------------------->
 
       <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
 
-          <section class="py-4">
-          </section>
-
-          <section class="py-4">
+          <section class="py-5">
             <div class="row">
               <div class="col-lg-12 mb-4">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="text-uppercase mb-0">Event Approvals</h6>
+                    <h6 class="text-uppercase mb-0">Updates</h6>
                   </div>
-                  <div class="card-body">
-                    <table class="table table-striped card-text" id="myTable">
+                  <div class="card-body">                           
+                    <table class="table table-striped card-text">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -148,37 +149,10 @@
                         </tr>
                       </thead>
                       <tbody>
-                      
-                         <%
-		                  	Connection con 		 = null;
-                      		PreparedStatement st = null;
-		                  	ResultSet rs 		 = null;
-		                
-		                   	
-		                  	try
-		                  	{
-		                  		String sql = "select * from event_ledger where status_level = 1 order by start_date asc";
-		                  		con = (Connection) GetConnection.getConnection();
-		                  		st = con.prepareStatement(sql);
-		                  		String Username =(String)session.getAttribute("username");
-		                  		
-		                  		
-		                  		
-		                  		rs = st.executeQuery();
-		                  		while(rs.next())
-		                  		{
-		                  			
-		                  %>
-		                  			
-		                  	 <tr>
-                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-                          
-                          <td><%= rs.getString(4)  %></td>
-                          <td><%= rs.getString(2)  %></td>
-                          <td style="display: none;" ><%= rs.getString(3)  %></td>
-                          <td style="display: none;" ><%= rs.getDate(7)  %></td>
-                          <td style="display: none;" ><%= rs.getDate(8)  %></td>
-                          <td style="display: none;" ><%= rs.getInt(1)  %></td>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Event1</td>
                           <td>
                             <button type="button" data-toggle="modal" data-target="#myModal1" class="btn-sm btn-info">Message</button>
                             <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
@@ -209,14 +183,11 @@
                                   <section>
                                     <div class="row">
                                       <div class="col-lg-12">
-                                        <div class="card mb-lg-0">
+                                        <div class="card mb-lg-0">         
                                           <div class="card-header">
                                             <h2 class="h6 mb-0 text-uppercase">Sender</h2>
                                           </div>
-                                          <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                          consequat.</div>
+                                          <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
                                         </div>
                                       </div>
                                     </div>
@@ -227,7 +198,7 @@
                                   <section>
                                     <div class="row">
                                       <div class="col-lg-12">
-                                        <div class="card mb-lg-0">
+                                        <div class="card mb-lg-0">         
                                           <div class="card-header">
                                             <h2 class="h6 mb-0 text-uppercase">Sender</h2>
                                           </div>
@@ -245,30 +216,28 @@
                             </div>
                           </td>
                           <td>
-                            <button type="button" data-toggle="modal" data-target="#myModal2" class="btn-sm btn-primary" id="details">Details</button>
+                            <button type="button" data-toggle="modal" data-target="#myModal2" class="btn-sm btn-primary">Details</button>
                             <div id="myModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                             <div role="document" class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h4 id="exampleModalLabel" class="modal-title" id="Event_Name"><span id="Event_Name"></span></h4>
+                                  <h4 id="exampleModalLabel" class="modal-title">Event Name</h4>
                                   <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                                 </div>
                                 <div class="modal-body">
-                                  <p >Head Organizer Name  : <span id="Head_Organizer_Name"></span></p>
-                                  <p>Start Date : <span id="Start_Date"></span></p>
-                                  <p>End Date : <span id="End_Date"></span></p>
-                                  <p>Event Description : <span id="Event_Description"></span></p>
-	
-	
-                                  <form action="Principal_Decision" method="post">
+                                  <p>Head Organiser Name</p>
+                                  <p>Event Start and End Date</p>
+                                  <p>Event Description</p>
+
+                                  <form action="#">
                                     <br>
                                     <div class="form-group">
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input" value="1" required>
+                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input">
                                         <label for="customRadioInline1" class="custom-control-label"><h4>Accept</h4></label>
                                       </div>
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input"  value="2">
+                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input">
                                         <label for="customRadioInline2" class="custom-control-label"><h4>Reject</h4></label>
                                       </div>
                                     </div>
@@ -279,10 +248,10 @@
                                       <textarea type="textarea" class="form-control"></textarea>
                                       <small class="form-text text-muted ml-3">Any Message for the Organiser.</small>
                                     </div>
-									
+
                                     <br>
-                                    <div class="form-group">
-                                    <button type="submit" id="submit_btn" class="btn btn-primary pull-right my-2" style="float:right;" name="submit"  > Submit</button>
+                                    <div class="form-group">       
+                                      <input type="submit" value="Send" class="btn btn-primary" data-dismiss="modal">
                                     </div>
                                   </form>
 
@@ -291,6 +260,87 @@
                             </div>
                             </div>
                           </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Event2</td>
+                          <td><button class="btn-sm btn-info">Message</button></td>
+                          <td><button class="btn-sm btn-primary">Details</button></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>Larry</td>
+                          <td>Event3</td>
+                          <td><button class="btn-sm btn-info">Message</button></td>
+                          <td><button class="btn-sm btn-primary">Details</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-----Event-Proposals--------------------------------------------------------------------------------------------->
+
+          <section>
+            <div class="row">
+              <div class="col-lg-12 mb-4">
+                <div class="card ">
+                  <div class="card-header">
+                    <div class="row justify-content-center">
+                      <div class="col-md-6">
+                        <h6 class="text-uppercase mb-0">Event Proposals</h6>
+                      </div>
+                      <div class="col-md-5 text-center">
+                        <a href="my_events.jsp"><h6 class="text-uppercase mb-0">View All</h6></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body justify-content-center">                           
+                  <table class="table table-striped card-text" id="myTable" >
+                      <thead>
+                        <tr >
+                          <th>#</th>
+                          <th>Sender Name</th>
+                          <th>Event Name</th>
+                          
+                          <th>Permission Request</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      
+                         <%
+		                  	Connection con 		 = null;
+                      		PreparedStatement st = null;
+		                  	ResultSet rs 		 = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = "select * from event_ledger where status_level = 1 order by start_date asc";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		String Username =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  			
+		                  %>
+		                  			
+		                  	 <tr class = "justify-content-center">
+                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+                          
+                          <td><%= rs.getString(4)  %></td>
+                          <td><%= rs.getString(2)  %></td>
+                         
+                          <td style="max-width=100%;"><a href="my_events_detail.jsp"><button class="btn-sm btn-primary pull-right mx">View</button></a></td>
+             
                         </tr>
 		                  <% 	
 		                  		}
@@ -314,142 +364,138 @@
             </div>
           </section>
 
-          <section class="py-3">
+          <section class="py-2">
           </section>
 
+          <!-----Past-Events--------------------------------------------------------------------------------------------->
 
+          <section class="py-3">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="card">
 
-   <section>
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="card">
+                  <div class="card-header">
+                    <h6 class="text-uppercase mb-0"><a href="past_events.html">Past Events</a></h6>
+                  </div>
 
-            <div class="card-header">
-              <h6 class="text-uppercase mb-0"><a href="past_events.html">Past Events</a></h6>
+                  <div class="card-body">                          
+                    <table class="table table-striped table-sm card-text">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Username</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter      </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">4</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">5</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">6</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div> 
+              </div>
+
+              <!-----Upcoming-Events--------------------------------------------------------------------------------------------->
+
+              <div class="col-lg-6">
+                <div class="card">
+
+                  <div class="card-header">
+                    <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">Upcoming/Ongoing Events</a></h6>
+                  </div>
+
+                  <div class="card-body">                          
+                    <table class="table table-striped table-sm card-text">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Username</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter      </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">4</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">5</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">6</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
             </div>
-
-            <div class="card-body">
-              <table class="table table-striped table-sm card-text">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter      </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-
-            <div class="card-header">
-              <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">Upcoming/Ongoing Events</a></h6>
-            </div>
-
-            <div class="card-body">
-              <table class="table table-striped table-sm card-text">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter      </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
-
-
-
+          </section>
 
           <section class="py-3">
           </section>
@@ -468,7 +514,7 @@
                 <p class="mb-0">Design by <a href="https://bootstrapious.com/admin-templates" class="external text-gray-400">Mini Bois</a></p>
                 <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
               </div>
-
+              
             </div>
           </div>
         </footer>
@@ -476,52 +522,6 @@
     </div>
 
     <!-- JavaScript files-->
-    <script>
-/*     $('table tbody tr  td').on('click',function(){
-        $("#myModal2").modal("show");
-        $("#txtfnameP").val($(this).closest('tr').children()[1].textContent());
-        var s = $(this).closest('tr').children()[2].textContent;
-       
-        $("$txtfnameP").html(s);
-        $("#txtlname").val($(this).closest('tr').children()[2].textContent);
-        $("#txtlname1").val($(this).closest('tr').children()[3].textContent);
-        $("#txtlname11").val($(this).closest('tr').children()[4].textContent);
-    });
-    
-    
-     */
-    
-    $(document).ready(function(){
-
-        // code to read selected table row cell data (values).
-        $("#myTable").on('click','#details',function(){
-             // get the current row
-             var currentRow=$(this).closest("tr"); 	
-             
-             var col1=currentRow.find("td:eq(0)").text();
-             var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-             var col3=currentRow.find("td:eq(2)").text(); // get current row 3rd TD
-             var col4=currentRow.find("td:eq(3)").text(); // get current row 3rd TD
-             var col5=currentRow.find("td:eq(4)").text(); // get current row 3rd TD
-             var col6=currentRow.find("td:eq(5)").text(); // get current row 3rd TD
-             var col7=currentRow.find("td:eq(6)").text(); // get current row 3rd TD
-           
-             $("#Event_Name").html(col2);
-             $("#Head_Organizer_Name").html(col1);
-             $("#Start_Date").html(col4);
-             $("#End_Date").html(col5);
-             $("#Event_Description").html(col3);
-           
-             $("#submit_btn").val(col6);
-           	
-             
-        });
-    });
-    
-    
-    
-    
-    </script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
