@@ -138,8 +138,40 @@
                     </div>
 
                     <div class="card-body">
-
-                      <h5><span>Approved/Rejected</span> By</h5>
+					<%
+                      		Connection con = null;
+                      		PreparedStatement st  = null;
+                      		ResultSet rs  = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		/* String sql = "select * from event_ledger where event_id= ? ";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql); */
+		                  		/*  String Username =(String)session.getAttribute("username");*/
+		                  		String Event_id = (request.getParameter("view")); 
+		                  		out.print("id is :_---------------------------"+session.getAttribute("id"));
+		                  		
+		                  		
+		                  		/* st.setString(1,Username);
+		                  		rs = st.executeQuery(); */
+		                  		
+		                  			
+		                  %>
+		                  			
+		                  	
+		                  		
+		                  <% 	
+		                  		
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		out.print(ex);
+		                  	}
+                  	
+                 	 %>                      <h5><span>Approved/Rejected</span> By</h5>
                       <br>
                       <p>Head Organiser</p>
                       <p>Event Description</p>

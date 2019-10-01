@@ -177,8 +177,9 @@
 		                          <td class="text-center"><%= rs.getString(2)  %></td>
 		                          <td class="text-center"><%= rs.getDate(7)  %></td>
 		                          <td class="text-center"><%= rs.getDate(8)  %></td>
-		                          <td><a href="my_events_detail.jsp"><button class="btn-sm btn-primary">View</button></a></td>
-		                          
+		                         
+		                          	<td><a href="my_events_detail.jsp"><button class="btn-sm btn-primary">View</button></a></td>
+		                         
                        		 	</tr>
 		                  <% 	
 		                  		}

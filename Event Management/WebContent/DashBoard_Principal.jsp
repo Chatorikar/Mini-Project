@@ -9,6 +9,7 @@
     <%@page import="java.sql.*"%>
     <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
     
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  
     
 
@@ -36,6 +37,7 @@
     <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/logo.png">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
   <body>
 		  <%
@@ -138,7 +140,7 @@
                     <h6 class="text-uppercase mb-0">Updates</h6>
                   </div>
                   <div class="card-body">                           
-                    <table class="table table-striped card-text">
+                     <table class="table table-striped card-text" id="myTable">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -149,10 +151,45 @@
                         </tr>
                       </thead>
                       <tbody>
+                      
+                      
+                      <%
+		                  	Connection con 		 = null;
+                      		PreparedStatement st = null;
+		                  	ResultSet rs 		 = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = "select * from event_ledger where status_level = 2	order by start_date asc";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		String Username =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  			
+		                  %>
+		                  			
+                      
+                      
+                      
+                      
                         <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Event1</td>
+                          
+                        
+                          
+                         <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+                          
+                          <td><%= rs.getString(4)  %></td> 									<!--  1 UserName     -->
+                          <td><%= rs.getString(2)  %></td>  								<!--  2 Event Name  -->
+                          <td style="display: none;" ><%= rs.getString(3)  %></td> 			<!--  3 Description  -->
+                          <td style="display: none;" ><%= rs.getDate(7)  %></td>   			<!--  4 start_date   -->
+                          <td style="display: none;" ><%= rs.getDate(8)  %></td>   			<!--  5 end_date     -->
+                          <td style="display: none;" ><%= rs.getInt(1)  %></td>	   			<!--  6 event_id     -->
                           <td>
                             <button type="button" data-toggle="modal" data-target="#myModal1" class="btn-sm btn-info">Message</button>
                             <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
@@ -216,28 +253,30 @@
                             </div>
                           </td>
                           <td>
-                            <button type="button" data-toggle="modal" data-target="#myModal2" class="btn-sm btn-primary">Details</button>
+                             <button type="button" data-toggle="modal" data-target="#myModal2" class="btn-sm btn-primary" id="details">Details</button>
                             <div id="myModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                             <div role="document" class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h4 id="exampleModalLabel" class="modal-title">Event Name</h4>
+                                  <h4 id="exampleModalLabel" class="modal-title" id="Event_Name"><span id="Event_Name"></span></h4>
                                   <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                                 </div>
                                 <div class="modal-body">
-                                  <p>Head Organiser Name</p>
-                                  <p>Event Start and End Date</p>
-                                  <p>Event Description</p>
-
-                                  <form action="#">
+                                  <p>Head Organizer Name  : <span id="Head_Organizer_Name"></span></p>
+                                  <p>Start Date : <span id="Start_Date"></span></p>
+                                  <p>End Date : <span id="End_Date"></span></p>
+                                  <p>Event Description : <span id="Event_Description"></span></p>
+	
+	
+                                  <form action="Principal_Decision" method="post">
                                     <br>
                                     <div class="form-group">
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input">
+                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input" value="1" required>
                                         <label for="customRadioInline1" class="custom-control-label"><h4>Accept</h4></label>
                                       </div>
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input">
+                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input"  value="2">
                                         <label for="customRadioInline2" class="custom-control-label"><h4>Reject</h4></label>
                                       </div>
                                     </div>
@@ -245,13 +284,13 @@
                                     <br>
                                     <div class="form-group">
                                       <label>Message</label>
-                                      <textarea type="textarea" class="form-control"></textarea>
+                                      <textarea type="textarea" class="form-control"name="description" ></textarea>
                                       <small class="form-text text-muted ml-3">Any Message for the Organiser.</small>
                                     </div>
-
+									
                                     <br>
-                                    <div class="form-group">       
-                                      <input type="submit" value="Send" class="btn btn-primary" data-dismiss="modal">
+                                    <div class="form-group">
+                                    <button type="submit" id="submit_btn" class="btn btn-primary pull-right my-2" style="float:right;" name="btn"  > Submit</button>
                                     </div>
                                   </form>
 
@@ -261,20 +300,19 @@
                             </div>
                           </td>
                         </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Event2</td>
-                          <td><button class="btn-sm btn-info">Message</button></td>
-                          <td><button class="btn-sm btn-primary">Details</button></td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>Event3</td>
-                          <td><button class="btn-sm btn-info">Message</button></td>
-                          <td><button class="btn-sm btn-primary">Details</button></td>
-                        </tr>
+                        
+                          <% 	
+		                  		}
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  	 	out.print(ex);
+		                  	}
+                  	
+                 	 %>
+                        
+                        
                       </tbody>
                     </table>
                   </div>
@@ -313,9 +351,9 @@
                       <tbody>
                       
                          <%
-		                  	Connection con 		 = null;
-                      		PreparedStatement st = null;
-		                  	ResultSet rs 		 = null;
+		                  	 con 		 = null;
+                      		 st			 = null;
+		                  	 rs 		 = null;
 		                
 		                   	
 		                  	try
@@ -338,9 +376,9 @@
                           
                           <td><%= rs.getString(4)  %></td>
                           <td><%= rs.getString(2)  %></td>
-                         
-                          <td style="max-width=100%;"><a href="my_events_detail.jsp"><button class="btn-sm btn-primary pull-right mx">View</button></a></td>
-             
+                         <form action="eventProp_detail.jsp" method="post">
+                          <td style="max-width=100%;"><button class="btn-sm btn-primary pull-right mx" value ="<%= rs.getInt(1)  %>" name="btn">View</button></td>
+             			</form>
                         </tr>
 		                  <% 	
 		                  		}
@@ -522,6 +560,37 @@
     </div>
 
     <!-- JavaScript files-->
+    <script>
+    
+    $(document).ready(function(){
+
+        // code to read selected table row cell data (values).
+        $("#myTable").on('click','#details',function(){
+             // get the current row
+             var currentRow=$(this).closest("tr"); 	
+             
+             var col1=currentRow.find("td:eq(0)").text();
+             var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+             var col3=currentRow.find("td:eq(2)").text(); // get current row 3rd TD
+             var col4=currentRow.find("td:eq(3)").text(); // get current row 3rd TD
+             var col5=currentRow.find("td:eq(4)").text(); // get current row 3rd TD
+             var col6=currentRow.find("td:eq(5)").text(); // get current row 3rd TD
+             var col7=currentRow.find("td:eq(6)").text(); // get current row 3rd TD
+           
+             $("#Event_Name").html(col2);
+             $("#Head_Organizer_Name").html(col1);
+             $("#Start_Date").html(col4);
+             $("#End_Date").html(col5);
+             $("#Event_Description").html(col3);
+           
+             $("#submit_btn").val(col6);
+           	
+             
+        });
+    });	
+    
+    </script>
+    
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
