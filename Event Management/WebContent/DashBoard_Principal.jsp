@@ -26,7 +26,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/font.css">
     <!-- Google fonts - Popppins for copy-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,800">
     <!-- orion icons-->
@@ -95,7 +95,7 @@
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item text-center"><small class="font-weight-bold headings-font-family text-uppercase">View all notifications</small></a>
             </div>
           </li>
-          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/Dp.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
+          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/principal.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
             <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">${username}</strong><small>Web Developer</small></a>
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Settings</a><a href="#" class="dropdown-item">Activity log       </a>
               <div class="dropdown-divider"></div><a href="Logout" class="dropdown-item">Logout</a>
@@ -191,7 +191,7 @@
                           <td style="display: none;" ><%= rs.getDate(8)  %></td>   			<!--  5 end_date     -->
                           <td style="display: none;" ><%= rs.getInt(1)  %></td>	   			<!--  6 event_id     -->
                           <td>
-                            <button type="button" data-toggle="modal" data-target="#myModal1" class="btn-sm btn-info">Message</button>
+                            <button type="button" data-toggle="modal" class="btn-sm btn-info" value="<%= rs.getInt(1)  %>" id="meassage" >Message</button>
                             <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                             <div role="document" class="modal-dialog modal-lg">
                               <div class="modal-content">
@@ -210,8 +210,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                      <input type="submit" value="Close" class="btn btn-default" data-dismiss="modal">
-                                      <input type="submit" value="Send" class="btn btn-primary">
+                                      <input type="submit" value="Close" class="btn btn-warning pull-right " data-dismiss="modal">
+                                      <input type="submit" value="Send" class="btn btn-primary ">
                                     </div>
                                   </form>
 
@@ -587,6 +587,21 @@
            	
              
         });
+        
+        
+        
+        
+        $("#meassage").on('click' , function(){
+        	
+        	var id = $(this).attr("value");
+        	<%
+        	String str = "<script> $(this).attr('value') </script>";
+        			
+        	System.out.print("--------------------"+str);
+        	%>
+        	
+        });
+        
     });	
     
     </script>
@@ -596,7 +611,7 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
     <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="js/ajax.js"></script>
     <script src="js/charts-home.js"></script>
     <script src="js/front.js"></script>
   </body>

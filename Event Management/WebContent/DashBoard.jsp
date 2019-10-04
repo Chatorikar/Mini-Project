@@ -158,7 +158,7 @@
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where username= ? and status_level = 1 order by start_date desc limit 5";
+		                  		String sql = "select * from event_ledger where username= ? and status_level < 6  order by start_date desc limit 5";
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");
@@ -177,9 +177,10 @@
 		                          <td class="text-center"><%= rs.getString(2)  %></td>
 		                          <td class="text-center"><%= rs.getDate(7)  %></td>
 		                          <td class="text-center"><%= rs.getDate(8)  %></td>
-		                         
-		                          	<td><a href="my_events_detail.jsp"><button class="btn-sm btn-primary">View</button></a></td>
-		                         
+		                        
+		                         <form action="my_events_detail.jsp" method="post">
+                          			<td style="max-width=100%;"><button class="btn-sm btn-primary pull-right mx" value ="<%= rs.getInt(1)  %>" name="btn">View</button></td>
+             					</form>
                        		 	</tr>
 		                  <% 	
 		                  		}

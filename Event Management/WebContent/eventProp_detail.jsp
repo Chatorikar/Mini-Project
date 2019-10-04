@@ -26,7 +26,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/font.css">
     <!-- Google fonts - Popppins for copy-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,800">
     <!-- orion icons-->
@@ -51,11 +51,11 @@
 			{
 				response.sendRedirect("Login.jsp");
 			}
-			if(request.getParameter("btn") == null)
+			/* /* if(request.getParameter("btn") == null)
 			{
 				response.sendRedirect("DashBoard_Principal.jsp");
 			}
-			
+			 */ 
 		
 		%>
     <!-- navbar-->
@@ -99,7 +99,7 @@
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item text-center"><small class="font-weight-bold headings-font-family text-uppercase">View all notifications</small></a>
             </div>
           </li>
-          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/Dp.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
+          <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/principal.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
             <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">${username}</strong><small>Web Developer</small></a>
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Settings</a><a href="#" class="dropdown-item">Activity log       </a>
               <div class="dropdown-divider"></div><a href="Logout" class="dropdown-item">Logout</a>
@@ -143,10 +143,20 @@
 		                  	{
 		                  		String username =(String)session.getAttribute("username");
 		                  		
-		                  		String sql_1 = "select * from event_ledger where event_id = ? ";
-		                  		String sql_2 = "select * from users where username  = ? ";
+		                  		String sql_1 = "select e.* , u.name  from event_ledger e  join users u  using(username) where event_id = ? ";
+		                  		
+		                  		String sql_2 = "select name from users where username = ( select username from event_ledger where event_id = ? ) ";
 		                  		
 		                  		String value = request.getParameter("btn");
+		                  		
+		                  		if(value == null)
+		                		{
+		                			// calling from user_to_principal.java to this 
+		                			
+		                			ServletContext sc = request.getServletContext();
+		                			value = (String)sc.getAttribute("event_id");
+		                			
+		                		}
 		                  		
 		                  		int id = Integer.parseInt(value);
 		                  		
@@ -158,13 +168,13 @@
 		                  		
 		                  		rs_1 = st.executeQuery();
 		                  		
-		                  		st = null;
+		                  		/* st = null;
 		                  		
 		                  		st = con.prepareStatement(sql_2);
 		                  		
-		                  		st.setString(1 ,username);
+		                  		st.setInt(1 ,id);
 		                  		
-		                  		rs_2 = st.executeQuery();
+		                  		rs_2 = st.executeQuery(); */
 		                  		
 		                  		String event_id =null;
 		                  		
@@ -172,7 +182,7 @@
 		                  		
 		                  		
 		                  		
-		                  		while( (rs_1.next()) && (rs_2.next()))
+		                  		while(rs_1.next())
 		                  		{
 		                  	%>
 		                  	
@@ -213,7 +223,7 @@
                       </div>
                       <div class="col-sm-3"></div>
                       <div class="col-sm-6">
-                        <h3 class="h6 text-uppercase mb-0">Sender : <span><%= rs_2.getString(4)  %></span></h3>
+                        <h3 class="h6 text-uppercase mb-0">Sender : <span><%= rs_1.getString(9)  %></span></h3>
                       </div>
                     </div>
                   </div>
@@ -296,13 +306,7 @@
                     </div>
 
                   </div>
-                </div>
-
-              </div>
-            </div>
-          </section>
-        </div>
-			<% 	
+                  <% 	
 			
 		                  		}
 		                  		
@@ -314,8 +318,151 @@
 		                  	}
                   	
                  	 %>
+                  
+                </div>
+     			
+     			<section class="py-2"></section>
 
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="h6 text-uppercase mb-0">Messaging</h3>
+                    </div>
 
+                    <div class="card-body">
+                      <form action="Principal_Decision" method="post">
+                      
+                        <br>
+                        <div class="form-group">
+                          <label>Message</label>
+                          <textarea type="textarea" class="form-control" style="height: 80px;" name="message"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="row justify-content-right">
+                            <div class="col-10"></div>
+                            <div class="col-2">
+                              <input type="submit" value="Send" class="btn btn-primary">
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+
+                     <%
+			        
+			      	 st 		 = null;
+			    	 rs_1 		 = null;
+			    	
+            	
+          
+             	
+            	try
+            	{
+            		
+            		
+            		
+
+            		String sql_1 = "select reason_for_rejection , communication_flag from event_communication where event_id = ? order by communication_number desc";
+            		
+            		String sql_2 = "select name from users where username  = (select username from event_ledger where event_id = ? ) ";
+            		
+            		String value = request.getParameter("btn");   // calling from DashBoard.java to this 
+            		
+            		String username =(String)session.getAttribute("username");
+            		
+            		if(value == null)
+            		{
+            			// calling from user_to_principal.java to this 
+            			
+            			ServletContext sc = request.getServletContext();
+            			value = (String)sc.getAttribute("event_id");
+            			
+            		}
+            		
+            		
+            		
+            		int id = Integer.parseInt(value);
+            		
+            		st = con.prepareStatement(sql_1);
+            		
+            		st.setInt(1, id);
+            		
+            		rs_1 = st.executeQuery();
+            		 
+            		st = null;
+            		
+            		st = con.prepareStatement(sql_2);
+            		
+            		st.setInt(1 ,id);
+            		
+            		rs_2 = st.executeQuery();
+            		
+            		String event_id =null;
+            		
+/*             		session.setAttribute("event_id", value);
+ */            		
+ 					rs_2.next();
+            		
+            		while( rs_1.next() )
+            		{
+            	%>
+            	
+                      
+                      
+                      
+                      
+                        
+                     
+
+                      <section class="py-2"></section>
+
+                      <section>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="card mb-lg-0">         
+                              <div class="card-header">
+                              <%
+                              	 if(rs_1.getInt(2) == 0)
+                              	 {
+                              %>
+                                <h2 class="h6 mb-0 text-uppercase"><%= rs_2.getString(1)  %></h2>
+                               <% 
+                               	 }
+                              	 else
+                              	 { 
+                               
+                               %> 
+                                 <h2 class="h6 mb-0 text-uppercase">Principal</h2>
+                                 <%} %>
+                              </div>
+                              <div class="card-body"><%= rs_1.getString(1)  %>.</div>
+                            </div>
+                            <% } %>
+                          </div>
+                        </div>
+                      </section>
+
+                    </div>
+                  </div>
+                
+              </div>
+            </div>
+          </section>
+        </div>
+        
+		<% 	
+			
+		                  		
+		                  		
+		                     }
+		                  	
+		                  	catch(Exception ex)
+		                  	{
+		                  			out.print(ex);
+		                  	}
+                  	
+          %>
+
+				
         <!-----Footer--------------------------------------------------------------------------------------------->
 
         <footer class="footer bg-white shadow align-self-end py-3 px-xl-5 w-100">
@@ -340,7 +487,7 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
     <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+   <script src="js/ajax.js"></script>
     <script src="js/front.js"></script>
 
     <script type="text/javascript">

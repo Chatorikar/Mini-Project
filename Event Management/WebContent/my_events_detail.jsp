@@ -1,3 +1,4 @@
+<%@page import="com.sun.tools.javac.util.Context"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@page import="com.DataBaseConnection.GetConnection"%>
@@ -9,6 +10,7 @@
     <%@page import="java.sql.*"%>
     <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
     
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  
     
 
@@ -25,8 +27,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <!-- Google fonts - Popppins for copy-->
+	<link rel="stylesheet" href="css/font.css">    <!-- Google fonts - Popppins for copy-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,800">
     <!-- orion icons-->
     <link rel="stylesheet" href="css/orionicons.css">
@@ -50,6 +51,12 @@
 			{
 				response.sendRedirect("Login.jsp");
 			}
+			
+			/* if(request.getParameter("btn") == null)
+			{
+				response.sendRedirect("DashBoard.jsp");
+			} */
+			
 		
 		%>
     <!-- navbar-->
@@ -102,6 +109,7 @@
         </ul>
       </nav>
     </header>
+
     <div class="d-flex align-items-stretch">
 
       <!-----Side-Bar--------------------------------------------------------------------------------------------->
@@ -125,6 +133,64 @@
 
       <!-----Center-Content--------------------------------------------------------------------------------------------->
 
+	<%
+            	Connection con 		 = null;
+              	PreparedStatement st = null;
+            	ResultSet rs_1 		 = null;
+            	ResultSet rs_2 		 = null;
+          
+             	
+            	try
+            	{
+            		
+            		String username =(String)session.getAttribute("username");
+            		
+            		String sql_1 = "select * from event_ledger where event_id = ? ";
+            		
+            		String sql_2 = "select * from users where username  = ? ";
+            		
+            		String value = request.getParameter("btn");   // calling from DashBoard.java to this 
+            		
+            		if(value == null)
+            		{
+            			// calling from user_to_principal.java to this 
+            			
+            			ServletContext sc = request.getServletContext();
+            			value = (String)sc.getAttribute("event_id");
+            			
+            		}
+            		
+            		
+            		
+            		int id = Integer.parseInt(value);
+            		
+            		con = (Connection) GetConnection.getConnection();
+            		
+            		st = con.prepareStatement(sql_1);
+            		
+            		st.setInt(1, id);
+            		
+            		rs_1 = st.executeQuery();
+            		
+            		st = null;
+            		
+            		st = con.prepareStatement(sql_2);
+            		
+            		st.setString(1 ,username);
+            		
+            		rs_2 = st.executeQuery();
+            		
+            		String event_id =null;
+            		
+            		session.setAttribute("event_id", value);
+            		
+            		
+            		
+            		while( (rs_1.next()) && (rs_2.next()))
+            		{
+            	%>
+            	
+
       <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
 
@@ -139,109 +205,212 @@
 
                     <div class="card-body">
 					<%
-                      		Connection con = null;
-                      		PreparedStatement st  = null;
-                      		ResultSet rs  = null;
-		                
-		                   	
-		                  	try
-		                  	{
-		                  		/* String sql = "select * from event_ledger where event_id= ? ";
-		                  		con = (Connection) GetConnection.getConnection();
-		                  		st = con.prepareStatement(sql); */
-		                  		/*  String Username =(String)session.getAttribute("username");*/
-		                  		String Event_id = (request.getParameter("view")); 
-		                  		out.print("id is :_---------------------------"+session.getAttribute("id"));
-		                  		
-		                  		
-		                  		/* st.setString(1,Username);
-		                  		rs = st.executeQuery(); */
-		                  		
-		                  			
-		                  %>
-		                  			
-		                  	
-		                  		
-		                  <% 	
-		                  		
-		                  		
-		                  	}
-		                  	catch(Exception ex)
-		                  	{
-		                  		out.print(ex);
-		                  	}
-                  	
-                 	 %>                      <h5><span>Approved/Rejected</span> By</h5>
+						if( rs_1.getInt(5) >= 3)
+						{
+					
+					%>
+           
+           				<h5><span>Approved by Principal </span> </h5>
+          		  <% 
+						}
+						else if( rs_1.getInt(5) == 2) {
+						
+                   %>
+           				  <h5><span>Rejected by Principal</span> </h5>
+           				  <%} else  { %>
+           				  
+           				  <h5><span>Waiting for Principal Response</span></h5>
+           				  <%} %>
+           				  
+           		
                       <br>
-                      <p>Head Organiser</p>
-                      <p>Event Description</p>
-                      <p>Start Date</p>
-                      <p>End Date</p>
-                      <br>
+                      <div class="row">
+                      <div class="col-md-12">
+                        <div class="row py-3">
+                          <div class="col-md-2">Head Organiser</div>
+                          <div class="col-md-1">:</div>
+                          <div class="col-md-9"><i><%= rs_2.getString(4)  %></i></div>
+                        </div>
+                        <div class="row py-3">
+                          <div class="col-md-2">Start Date</div>
+                          <div class="col-md-1">:</div>
+                          <div class="col-md-9"><i><%= rs_1.getDate(7)  %></i></div>
+                        </div>
+                        <div class="row py-3">
+                          <div class="col-md-2">End Date</div>
+                          <div class="col-md-1">: </div>
+                          <div class="col-md-9"><i><%= rs_1.getDate(8)  %></i></div>
+                        </div>
+                        <div class="row py-3">
+                          <div class="col-md-2">Event Description</div>
+                          <div class="col-md-1">:</div>
+                          <div class="col-md-9"><i><%= rs_1.getString(3)  %></i></div>
+                        </div>
+					
+						<%
+						if( rs_1.getInt(5) >= 3)
+						{
+					
+					%>
+           
+           				<button type="button" class="btn btn-primary ">Proceed</button>
+          		  <% 
+						}
+						else if( rs_1.getInt(5) == 2) {
+						
+                   %>
+           				  <button type="button" class="btn btn-primary disabled ">Proceed</button>
+           				  <%} else  { %>
+           				  
+           				  
+           				 	
+           				 	<button type="button" class="btn disabled">Proceed</button>
+           				 	
+           				  <%} %>
+					
+					
+                         
+                            
+                      </div>
+                    </div>
 
-                      <button type="button" data-toggle="modal" data-target="#myModal1" class="btn-sm btn-info">Message</button>
-                      <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-                        <div role="document" class="modal-dialog modal-lg">
-                          <div class="modal-content">
 
-                            <div class="modal-header">
-                              <h4 id="exampleModalLabel" class="modal-title">Messaging</h4>
-                              <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                    </div>
+                  </div>
+
+                  <section class="py-2"></section>
+
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="h6 text-uppercase mb-0">Messaging</h3>
+                    </div>
+
+                    <div class="card-body">
+                      <form action="user_to_principal_message" method="post">
+                        <br>
+                        <div class="form-group">
+                          <label>Message</label>
+                          <textarea type="textarea" class="form-control" style="height: 80px;" name="message"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="row justify-content-right">
+                            <div class="col-10"></div>
+                            <div class="col-2">
+                              <input type="submit" value="Send" class="btn btn-primary">
                             </div>
-
-                            <div class="modal-body">
-                              <form action="#">
-                                <br>
-                                <div class="form-group">
-                                  <label>Message</label>
-                                  <textarea type="textarea" class="form-control"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                  <input type="submit" value="Close" class="btn btn-default" data-dismiss="modal">
-                                  <input type="submit" value="Send" class="btn btn-primary">
-                                </div>
-                              </form>
-
-                              <section class="py-2"></section>
-
-                              <section>
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="card mb-lg-0">         
-                                      <div class="card-header">
-                                        <h2 class="h6 mb-0 text-uppercase">Sender</h2>
-                                      </div>
-                                      <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-
-                              <section class="py-2"></section>
-
-                              <section>
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="card mb-lg-0">         
-                                      <div class="card-header">
-                                        <h2 class="h6 mb-0 text-uppercase">Sender</h2>
-                                      </div>
-                                      <div class="card-body">Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-                            </div>
-
                           </div>
                         </div>
-                      </div>
+                      </form>
 
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <button class="btn-sm btn-primary">Proceed</button>
+                     
+                       
+		<% 	
+			
+		                  		}
+		                  		
+		                     }
+		                  	
+		                  	catch(Exception ex)
+		                  	{
+		                  			out.print(ex);
+		                  	}
+                  	
+          %>
+                      
+                      
+        <%
+			        
+			      	 st 		 = null;
+			    	 rs_1 		 = null;
+			    	
+            	
+          
+             	
+            	try
+            	{
+            		
+            		
+            		
+            		String sql_1 = "select reason_for_rejection , communication_flag from event_communication where event_id = ? order by communication_number desc";
+            		
+            		String sql_2 = "select name from users where username  = ? ";
+            		
+            		String value = request.getParameter("btn");   // calling from DashBoard.java to this 
+            		
+            		String username =(String)session.getAttribute("username");
+            		
+            		if(value == null)
+            		{
+            			// calling from user_to_principal.java to this 
+            			
+            			ServletContext sc = request.getServletContext();
+            			value = (String)sc.getAttribute("event_id");
+            			
+            		}
+            		
+            		
+            		
+            		int id = Integer.parseInt(value);
+            		
+            		st = con.prepareStatement(sql_1);
+            		
+            		st.setInt(1, id);
+            		
+            		rs_1 = st.executeQuery();
+            		 
+            		st = null;
+            		
+            		st = con.prepareStatement(sql_2);
+            		
+            		st.setString(1 ,username);
+            		
+            		rs_2 = st.executeQuery();
+            		
+            		String event_id =null;
+            		
+/*             		session.setAttribute("event_id", value);
+ */            		
+ 					rs_2.next();
+            		
+            		while( rs_1.next() )
+            		{
+            	%>
+            	
+                      
+                      
+                      
+                      
+                        
+                     
+
+                      <section class="py-2"></section>
+
+                      <section>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="card mb-lg-0">         
+                              <div class="card-header">
+                              <%
+                              	 if(rs_1.getInt(2) == 0)
+                              	 {
+                              %>
+                                <h2 class="h6 mb-0 text-uppercase"><%= rs_2.getString(1)  %></h2>
+                               <% 
+                               	 }
+                              	 else
+                              	 { 
+                               
+                               %> 
+                                 <h2 class="h6 mb-0 text-uppercase">Principal</h2>
+                                 <%} %>
+                              </div>
+                              <div class="card-body"><%= rs_1.getString(1)  %>.</div>
+                            </div>
+                            <% } %>
+                          </div>
+                        </div>
+                      </section>
 
                     </div>
                   </div>
@@ -250,7 +419,19 @@
             </div>
           </section>
         </div>
-
+        
+		<% 	
+			
+		                  		
+		                  		
+		                     }
+		                  	
+		                  	catch(Exception ex)
+		                  	{
+		                  			out.print(ex);
+		                  	}
+                  	
+          %>
         <!-----Footer--------------------------------------------------------------------------------------------->
 
         <footer class="footer bg-white shadow align-self-end py-3 px-xl-5 w-100">
