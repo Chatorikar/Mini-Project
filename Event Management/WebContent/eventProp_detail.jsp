@@ -37,10 +37,13 @@
     <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/logo.png">
+    
   </head>
   <body>
 		  <%
-		
+			  response.addHeader("Cache-Control","no-cache"); //HTTP 1.1
+			  response.addHeader("Pragma","no-cache"); //HTTP 1.0
+			  response.addDateHeader ("Expires", 0); //prevent caching at the proxy server
 			response.setHeader("Cache-Control", "no-cache , no-store , must-revalidate" );
 		
 			response.setHeader("Progma", "no-cahce");
@@ -153,8 +156,9 @@
 		                		{
 		                			// calling from user_to_principal.java to this 
 		                			
-		                			ServletContext sc = request.getServletContext();
-		                			value = (String)sc.getAttribute("event_id");
+		                			/* ServletContext sc = request.getServletContext();
+		                			value = (String)sc.getAttribute("event_id"); */
+		                  			value = (String)session.getAttribute("event_id_1");	
 		                			
 		                		}
 		                  		
@@ -329,7 +333,7 @@
                     </div>
 
                     <div class="card-body">
-                      <form action="Principal_Decision" method="post">
+                      <form action="Principal_Decision" method="post"  name="sub">
                       
                         <br>
                         <div class="form-group">
@@ -373,8 +377,9 @@
             		{
             			// calling from user_to_principal.java to this 
             			
-            			ServletContext sc = request.getServletContext();
-            			value = (String)sc.getAttribute("event_id");
+            			
+            			value = (String)session.getAttribute("event_id_1");	
+            			//System.out.print("/////////////////////" + value);
             			
             		}
             		
@@ -489,7 +494,14 @@
     <script src="vendor/chart.js/Chart.min.js"></script>
    <script src="js/ajax.js"></script>
     <script src="js/front.js"></script>
-
+	
+	<!-- <script type="text/javascript">
+	if ( window.history.replaceState ) {
+		  window.history.replaceState( null, null, window.location.href );
+		}
+	
+	</script> -->
+	
     <script type="text/javascript">
       function validate() {
         //alert("Please select ACCEPT or REJECT !");

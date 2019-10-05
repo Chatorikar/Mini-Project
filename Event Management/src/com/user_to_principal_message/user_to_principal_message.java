@@ -47,9 +47,34 @@ public class user_to_principal_message extends HttpServlet {
 	 		
 		 	try {
 		 		
+		 		String record_in_Database = "select * from event_communication where ( event_id = ?  and reason_for_rejection = ? and communication_flag =1)"; 
+		 			
+	 			Connection con = (Connection) GetConnection.getConnection();
+		 		
+	 			PreparedStatement check_record_in_Database = (PreparedStatement) con.prepareStatement(record_in_Database);
+	 			
+	 			check_record_in_Database.setInt(1, Integer.parseInt(event_id)); 
+	 			
+	 			System.out.print(Integer.parseInt(event_id));
+	 			
+	 			check_record_in_Database.setString(2, request.getParameter("message")); 
+	 			
+	 			
+	 			
+
+	 			ResultSet Check_DB = check_record_in_Database.executeQuery();
+	 			
+	 			if( Check_DB.next() == true)
+	 			{	
+	 				System.out.print(Check_DB.getString(2));
+	 				session.setAttribute("event_id_1", event_id);	
+
+				 	
+				 	response.sendRedirect("my_events_detail.jsp");
+	 			}
 			
 		 		
-		 		Connection con = (Connection) GetConnection.getConnection();
+		 		//Connection con = (Connection) GetConnection.getConnection();
 		 		
 		 		PreparedStatement st_change_status_level = (PreparedStatement) con.prepareStatement(change_status_level); 
 		 		
@@ -107,11 +132,13 @@ public class user_to_principal_message extends HttpServlet {
 		 		
 		 		
 		 		
+		 		//getServletContext().setAttribute("event_id", event_id);	
+		 		//getServletContext().getRequestDispatcher("/my_events_detail.jsp").forward(request,response);
 		 			
-		 		getServletContext().setAttribute("event_id", event_id);	
-		 		getServletContext().getRequestDispatcher("/my_events_detail.jsp").forward(request,response);
-		 			
-		 			
+			 	session.setAttribute("event_id_1", event_id);	
+
+			 	
+			 	response.sendRedirect("my_events_detail.jsp");	
 		 			
 		 			
 		 			

@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/logo.png">
+     
   </head>
   <body>
 		  <%
@@ -155,8 +156,10 @@
             		{
             			// calling from user_to_principal.java to this 
             			
-            			ServletContext sc = request.getServletContext();
-            			value = (String)sc.getAttribute("event_id");
+            			/* ServletContext sc = request.getServletContext();
+            			value = (String)sc.getAttribute("event_id"); */
+            			
+            			value = (String)session.getAttribute("event_id_1");	
             			
             		}
             		
@@ -344,8 +347,10 @@
             		{
             			// calling from user_to_principal.java to this 
             			
-            			ServletContext sc = request.getServletContext();
-            			value = (String)sc.getAttribute("event_id");
+            			/* ServletContext sc = request.getServletContext();
+            			value = (String)sc.getAttribute("event_id"); */
+            			
+            			value = (String)session.getAttribute("event_id_1");	
             			
             		}
             		
@@ -451,6 +456,8 @@
       </div>
     </div>
     <!-- JavaScript files-->
+  
+    
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
