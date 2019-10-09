@@ -132,166 +132,176 @@
       <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
 
-          <section class="py-5">
-            <div class="row">
+     <section class="py-4">
+            <div class="row  justify-content-center" >
               <div class="col-lg-12 mb-4">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="text-uppercase mb-0">Updates</h6>
+                    <h6 class="text-uppercase mb-0">Event Approvals</h6>
                   </div>
-                  <div class="card-body">                           
-                     <table class="table table-striped card-text" id="myTable">
+                  <div class="card-body">
+                    <table class="table table-striped card-text  text-center" id="myTable">
                       <thead>
                         <tr>
                           <th>#</th>
                           <th>Sender Name</th>
                           <th>Event Name</th>
-                          <th>Formal Chat</th>
-                          <th>Permission Request</th>
+                          <th>Publicity Permission</th>
+                          <th>Hoarding Permission</th>
                         </tr>
                       </thead>
                       <tbody>
-                      
-                      
-                      <%
-		                  	Connection con 		 = null;
-                      		PreparedStatement st = null;
-		                  	ResultSet rs 		 = null;
-		                
-		                   	
+
+                         <%
+		                  	Connection con 		 				= null;
+                      		PreparedStatement st 				= null;
+		                  	ResultSet rs 		 				= null;
+		                  	ResultSet rs_check_req_status 		= null;
+		                  	ResultSet rs_Approve_Or_Rejected		= null;
+							int flag = 1;
+
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where status_level = 2	order by start_date asc";
 		                  		con = (Connection) GetConnection.getConnection();
+		                  		
+		                  		String sql = "select t.uname ,  t.en , t.rs , t.re , t.eid  from  (select u.name  as uname,  e.event_name as en , m.req_start as  rs, m.req_end as re, e.event_id as eid from event_ledger as e join misc_ledger  as m using(event_id ) join users as u  using(username) where e.status_level >= 3 ) as t group by t.uname ,  t.en , t.rs , t.re , t.eid ";
+		                  		
+		                  		
+		                  		
+		                  		String check_req_status = null;
+		                  		
+		                  		
 		                  		st = con.prepareStatement(sql);
+		                  		
+		                  		rs_Approve_Or_Rejected = st.executeQuery();
+		                  		
+		                  		
+		                  		
 		                  		String Username =(String)session.getAttribute("username");
-		                  		
-		                  		
-		                  		
+							
+
+								
 		                  		rs = st.executeQuery();
 		                  		while(rs.next())
 		                  		{
+									
+ 		                  			check_req_status	= "select * from misc_ledger where event_id = ? and permission_type = 1 and request_status = 1 ";
+		                  			st 					= con.prepareStatement(check_req_status);
+		                  			st.setInt(1, rs.getInt(5));
+		                  			rs_check_req_status = st.executeQuery();
+		                  			
+		                  			String Approve_Or_Rejected = "select count(request_status) from misc_ledger where event_id = ? and request_status = 1";
+		                  			st = con.prepareStatement(Approve_Or_Rejected);
+		                  			st.setInt(1, rs.getInt(5));
+		                  			rs_Approve_Or_Rejected = st.executeQuery();
+		                  			
+		                  			if(rs_Approve_Or_Rejected.next())
+		                  			{
+		                  				if ( rs_Approve_Or_Rejected.getInt(1) == 0)
+		                  				{
+		                  					continue;
+		                  				}
+		                  			}
 		                  			
 		                  %>
-		                  			
-                      
-                      
-                      
-                      
-                        <tr>
-                          
-                        
-                          
-                         <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-                          
-                          <td><%= rs.getString(4)  %></td> 									<!--  1 UserName     -->
-                          <td><%= rs.getString(2)  %></td>  								<!--  2 Event Name  -->
-                          <td style="display: none;" ><%= rs.getString(3)  %></td> 			<!--  3 Description  -->
-                          <td style="display: none;" ><%= rs.getDate(7)  %></td>   			<!--  4 start_date   -->
-                          <td style="display: none;" ><%= rs.getDate(8)  %></td>   			<!--  5 end_date     -->
-                          <td style="display: none;" ><%= rs.getInt(1)  %></td>	   			<!--  6 event_id     -->
+
+		                  	 <tr>
+                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+
+                          <td><%= rs.getString(1)  %></td>
+                          <td><%= rs.getString(2)  %></td>
+                          <td style="display: none;" ><%= rs.getString(2)  %></td>
+                          <td style="display: none;" ><%= rs.getDate(3)  %></td>
+                          <td style="display: none;" ><%= rs.getDate(4)  %></td>
+                           <td style="display: none;" ><%= rs.getInt(5)  %></td>
                           <td>
-                            <button type="button" data-toggle="modal" class="btn-sm btn-info" value="<%= rs.getInt(1)  %>" id="meassage" >Message</button>
-                            <div id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-                            <div role="document" class="modal-dialog modal-lg">
-                              <div class="modal-content">
-
-                                <div class="modal-header">
-                                  <h4 id="exampleModalLabel" class="modal-title">Messaging</h4>
-                                  <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-                                </div>
-
-                                <div class="modal-body">
-                                  <form action="#">
-                                    <br>
-                                    <div class="form-group">
-                                      <label>Message</label>
-                                      <textarea type="textarea" class="form-control"></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                      <input type="submit" value="Close" class="btn btn-warning pull-right " data-dismiss="modal">
-                                      <input type="submit" value="Send" class="btn btn-primary ">
-                                    </div>
-                                  </form>
-
-                                  <section class="py-2"></section>
-
-                                  <section>
-                                    <div class="row">
-                                      <div class="col-lg-12">
-                                        <div class="card mb-lg-0">         
-                                          <div class="card-header">
-                                            <h2 class="h6 mb-0 text-uppercase">Sender</h2>
-                                          </div>
-                                          <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </section>
-
-                                  <section class="py-2"></section>
-
-                                  <section>
-                                    <div class="row">
-                                      <div class="col-lg-12">
-                                        <div class="card mb-lg-0">         
-                                          <div class="card-header">
-                                            <h2 class="h6 mb-0 text-uppercase">Sender</h2>
-                                          </div>
-                                          <div class="card-body">Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </section>
-                                </div>
-
-                              </div>
-                            </div>
-                            </div>
-                          </td>
-                          <td>
-                             <button type="button" data-toggle="modal" data-target="#myModal2" class="btn-sm btn-primary" id="details">Details</button>
+                          <% while(rs_check_req_status.next()) 
+                          
+                          {
+                          	if(rs_check_req_status.getInt(2) == 1 && rs_check_req_status.getInt(5) == 1  ){
+                          		flag = 0;
+                          %>
+                         
+                            <button type="button" data-toggle="modal" data-target="#myModal2" class="btn-sm btn-primary pull-right" id="details">View1</button>
+                            
+                            <%
+                            	
+                          	}
+                          	
+                          	else{
+                          		
+                          		
+                          	%>
+                          		Approved
+                          	<% 
+                          	
+                          	}
+                          }
+                            %>
+                            
+                            
+                           
+                            
+                         
+                            
+                            
+                           
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             <div id="myModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                             <div role="document" class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h4 id="exampleModalLabel" class="modal-title" id="Event_Name"><span id="Event_Name"></span></h4>
-                                  <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                                  <h4 id="exampleModalLabel" class="modal-title" id="Event_Name">Publicity Permission </h4>
+                                	<button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                                 </div>
+                               
+                                <div class="modal-header">
+                                  <h5 id="exampleModalLabel" class="modal-title" id="Event_Name">Event Name : <span id="Event_Name"></span></h5>
+                                  
+                                </div>
+                               
                                 <div class="modal-body">
                                   <p>Head Organizer Name  : <span id="Head_Organizer_Name"></span></p>
                                   <p>Start Date : <span id="Start_Date"></span></p>
                                   <p>End Date : <span id="End_Date"></span></p>
                                   <p>Event Description : <span id="Event_Description"></span></p>
-	
-	
-                                  <form action="Principal_Decision" method="post">
+
+
+                                  <form action="Publicity_Permission" method="post">
                                     <br>
                                     <div class="form-group">
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input" value="1" required>
+                                        <input id="customRadioInline1" type="radio" name="customRadioInline1" class="custom-control-input" value="1">
                                         <label for="customRadioInline1" class="custom-control-label"><h4>Accept</h4></label>
                                       </div>
                                       <div class="custom-control custom-radio custom-control-inline">
-                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input"  value="2">
+                                        <input id="customRadioInline2" type="radio" name="customRadioInline1" class="custom-control-input" value="0">
                                         <label for="customRadioInline2" class="custom-control-label"><h4>Reject</h4></label>
                                       </div>
                                     </div>
 
                                     <br>
-                                    <div class="form-group">
-                                      <label>Message</label>
-                                      <textarea type="textarea" class="form-control"name="description" ></textarea>
-                                      <small class="form-text text-muted ml-3">Any Message for the Organiser.</small>
-                                    </div>
-									
+                                   
+
                                     <br>
                                     <div class="form-group">
-                                    <button type="submit" id="submit_btn" class="btn btn-primary pull-right my-2" style="float:right;" name="btn"  > Submit</button>
-                                    </div>
+									<button type="submit" value="submit_btn" class="btn btn-primary pull-right my-2" style="float:right;" name="submit"  id="submit_btn"> Submit</button>                                    </div>
                                   </form>
 
                                 </div>
@@ -299,20 +309,103 @@
                             </div>
                             </div>
                           </td>
+                          <td>
+                          <%
+                          
+                          	PreparedStatement st_Publicity 	= null;
+		                  	ResultSet rs_Publicity 		 	= null;
+		                  	
+		                  	String check_req_status_Publicity	= "select * from misc_ledger where event_id = ? and permission_type = 2 and request_status = 1 ";
+		                  	st_Publicity					= con.prepareStatement(check_req_status_Publicity);
+		                  	
+		                  	st_Publicity.setInt(1, rs.getInt(5));
+		                  	rs_Publicity = st_Publicity.executeQuery();
+                          
+                          %>
+                           <% while(rs_Publicity.next()) 
+                          
+                          {
+                          	if(rs_Publicity.getInt(2) == 2 && rs_Publicity.getInt(5) == 1  ){
+                          		flag = 0;
+                          %>
+                         
+                           <button type="button" data-toggle="modal" data-target="#myModal22" class="btn-sm btn-primary pull-right" id="details22">View</button>
+                            
+                            <%
+                            	
+                          	}
+                          	
+                          	else{
+                          		
+                          		
+                          	%>
+                          		Approved
+                          	<% 
+                          	
+                          	}
+                          }
+                            %>
+                            
+                            <div id="myModal22" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                            <div role="document" class="modal-dialog">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                  <h4 id="exampleModalLabel" class="modal-title" id="Event_Name">Hoarding Permission </h4>
+                                	<button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                                </div>
+                               
+                                <div class="modal-header">
+                                  <h5 id="exampleModalLabel" class="modal-title" id="Event_Name">Event Name : <span id="Event_Name"></span></h5>
+                                  
+                                </div>
+                                <div class="modal-body">
+                                  <p>Head Organizer Name  : <span id="Head_Organizer_Name22"></span></p>
+                                  <p>Start Date : <span id="Start_Date22"></span></p>
+                                  <p>End Date : <span id="End_Date22"></span></p>
+                                  <p>Event Description : <span id="Event_Description22"></span></p>
+
+
+                                  <form action="Hoarding_Permission" method="post">
+                                    <br>
+                                    <div class="form-group">
+                                      <div class="custom-control custom-radio custom-control-inline">
+                                        <input id="customRadioInline11" type="radio" name="customRadioInline11" class="custom-control-input" value="1">
+                                        <label for="customRadioInline11" class="custom-control-label"><h4>Accept</h4></label>
+                                      </div>
+                                      <div class="custom-control custom-radio custom-control-inline">
+                                        <input id="customRadioInline22" type="radio" name="customRadioInline11" class="custom-control-input" value="0">
+                                        <label for="customRadioInline22" class="custom-control-label"><h4>Reject</h4></label>
+                                      </div>
+                                    </div>
+
+                                    <br>
+                                   
+
+                                    <br>
+                                    <div class="form-group">
+									<button type="submit" value="submit_btn22" class="btn btn-primary pull-right my-2" style="float:right;" name="submit"  id="submit_btn22"> Submit</button>                                    </div>
+                                  </form>
+				
+                                </div>
+                              </div>
+                            </div>
+                            </div>
+                          </td>
                         </tr>
-                        
-                          <% 	
+		                  <%
 		                  		}
-		                  		
+
 		                  	}
 		                  	catch(Exception ex)
 		                  	{
-		                  	 	out.print(ex);
+
 		                  	}
-                  	
+
                  	 %>
-                        
-                        
+
+
+
+
                       </tbody>
                     </table>
                   </div>
@@ -320,6 +413,7 @@
               </div>
             </div>
           </section>
+
 
           <!-----Event-Proposals--------------------------------------------------------------------------------------------->
 
@@ -338,7 +432,7 @@
                     </div>
                   </div>
                   <div class="card-body justify-content-center">                           
-                  <table class="table table-striped card-text" id="myTable" >
+                  <table class="table table-striped card-text text-center" id="myTable" >
                       <thead>
                         <tr >
                           <th>#</th>
@@ -588,19 +682,33 @@
              
         });
         
+        $("#myTable").on('click','#details22',function(){
+            // get the current row
+            var currentRow=$(this).closest("tr"); 	
+            
+            var col1=currentRow.find("td:eq(0)").text();
+            var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+            var col3=currentRow.find("td:eq(2)").text(); // get current row 3rd TD
+            var col4=currentRow.find("td:eq(3)").text(); // get current row 3rd TD
+            var col5=currentRow.find("td:eq(4)").text(); // get current row 3rd TD
+            var col6=currentRow.find("td:eq(5)").text(); // get current row 3rd TD
+            var col7=currentRow.find("td:eq(6)").text(); // get current row 3rd TD
+          
+            $("#Event_Name22").html(col2);
+            $("#Head_Organizer_Name22").html(col1);
+            $("#Start_Date22").html(col4);
+            $("#End_Date22").html(col5);
+            $("#Event_Description22").html(col3);
+          
+            $("#submit_btn22").val(col6);
+          	
+            
+       });
         
         
         
-        $("#meassage").on('click' , function(){
-        	
-        	var id = $(this).attr("value");
-        	<%
-        	String str = "<script> $(this).attr('value') </script>";
-        			
-        	System.out.print("--------------------"+str);
-        	%>
-        	
-        });
+        
+       
         
     });	
     

@@ -1,8 +1,8 @@
 package com.Principal_Decision;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.DataBaseConnection.GetConnection;
-import com.mysql.jdbc.PreparedStatement;
+
 
 /**
  * Servlet implementation class Principal_Decision
@@ -25,7 +25,6 @@ public class Principal_Decision extends HttpServlet {
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		HttpSession session = request.getSession();
 	 	
 	 	String event_id = (String)session.getAttribute("event_id");
@@ -44,71 +43,76 @@ public class Principal_Decision extends HttpServlet {
 		 	int Decision =Integer.parseInt(request.getParameter("customRadioInline1"));  // 1 ==> Accept // 2 ==> Reject	
 		 		
 			 	try {
-			 		
+			 			
+			 			
 				 		if(Decision == 1)
 				 			update_event_ledger = "update event_ledger set status_level = 3  where event_id=?";
 				 		else
 				 			update_event_ledger = "update event_ledger set status_level = 2  where event_id=?";
 					 	
-					 	String insert_into_event_communication = "insert into event_communication values( ? , ? , ? , ?)";
+					 //	String insert_into_event_communication = "insert into event_communication values( ? , ? , ? , ?)";
 					 	
 					 	Connection con = (Connection) GetConnection.getConnection();
 					 	
-					 	PreparedStatement st_change_status_level = (PreparedStatement) con.prepareStatement(change_status_level); 
+				//	 	PreparedStatement st_change_status_level = (PreparedStatement) con.prepareStatement(change_status_level); 
 				 		
-				 		st_change_status_level.setInt(1, Integer.parseInt(event_id));
+				 		//st_change_status_level.setInt(1, Integer.parseInt(event_id));
 				 		
-				 		ResultSet rs_change_status_level = st_change_status_level.executeQuery();
+				 		//ResultSet rs_change_status_level = st_change_status_level.executeQuery();
 				 		
 				 		
-				 		PreparedStatement st = (PreparedStatement) con.prepareStatement(update_event_ledger);;
+				 		PreparedStatement st = con.prepareStatement(update_event_ledger);
+				 		st.setInt(1, Integer.parseInt(event_id));
+				
+				 		int i = st.executeUpdate();				   					  // flag = 0 ==> User Message.
+				 	 	
+					 	session.setAttribute("event_id_1", event_id);	
+
 					 	
-					 	if(request.getParameter("btn") == null) 
-					 		st.setInt(1, Integer.parseInt(event_id));
-					 	else 
-					 		st.setInt(1, Integer.parseInt(request.getParameter("btn")));
-					 	
-					 	
-					 		int i = st.executeUpdate();
-					 	
-					 	st = (PreparedStatement)con.prepareStatement(insert_into_event_communication);
-					 	
-					 	if(request.getParameter("btn") == null) {
-					 						 		
-					 		st.setInt(1, Integer.parseInt(event_id));   		 // Event id
-					 		
-					 		session.removeAttribute( "event_id" );
-					 		
-					 	}
-					 	else
-					 		st.setInt(1, Integer.parseInt(request.getParameter("btn")));
-					              
-					 	if(request.getParameter("description") == null)
-					 		st.setString(2 , request.getParameter("description") );   // Event description
-					 	else 
-					 		response.sendRedirect("DashBoard_Principal.jsp");
-					 		
-					 	
-					 	if(rs_change_status_level.next() == false){  				 // if result set is empty
+					 	response.sendRedirect("DashBoard_Principal.jsp");
 				 		
-					 		st.setInt(3 , 1 );										  // Communication number
-				 		}
-					 	else {
+				 		/*
+				 * if(request.getParameter("btn") == null) st.setInt(1,
+				 * Integer.parseInt(event_id)); else st.setInt(1,
+				 * Integer.parseInt(request.getParameter("btn")));
+				 * 
+				 * 
+				 * int i = st.executeUpdate();
+				 * 
+				 * st =
+				 * (PreparedStatement)con.prepareStatement(insert_into_event_communication);
+				 * 
+				 * if(request.getParameter("btn") == null) {
+				 * 
+				 * st.setInt(1, Integer.parseInt(event_id)); // Event id
+				 * 
+				 * session.removeAttribute( "event_id" );
+				 * 
+				 * } else st.setInt(1, Integer.parseInt(request.getParameter("btn")));
+				 * 
+				 * if(request.getParameter("description") == null) st.setString(2 ,
+				 * request.getParameter("description") ); // Event description else
+				 * 
+				 * response.sendRedirect("DashBoard_Principal.jsp");
+				 * 
+				 * 
+				 * if(rs_change_status_level.next() == false){ // if result set is empty
+				 * 
+				 * st.setInt(3 , 1 ); // Communication number } else {
+				 * 
+				 * int current_status = rs_change_status_level.getInt(1); // if ongoing
+				 * Communication current_status++; st.setInt(3 , current_status ); } //
+				 * Communication number
+				 * 
+				 * st.setInt(4 , 1 ); // flag = 1 ==> Principal Message.
+				 */
 					 	
-					 		int current_status = rs_change_status_level.getInt(1); // if ongoing Communication
-				 			current_status++;
-				 			st.setInt(3 , current_status );	
-					 	}
-					 										  // Communication number
-					 	
-					 	st.setInt(4 , 1 ); 										  // flag = 1 ==> Principal Message.
-					 
-					 	i = st.executeUpdate();				   					  // flag = 0 ==> User Message.
-					 	 	
-			
 //					 
-						getServletContext().setAttribute("event_id", event_id);	
-				 		getServletContext().getRequestDispatcher("/eventProp_detail.jsp").forward(request,response);
+				/*
+				 * getServletContext().setAttribute("event_id", event_id);
+				 * getServletContext().getRequestDispatcher("/eventProp_detail.jsp").forward(
+				 * request,response);
+				 */
 				 	
 				 	}
 			 	
@@ -124,7 +128,7 @@ public class Principal_Decision extends HttpServlet {
 			 	
 			 		
 				 	try {
-				 			String record_in_Database = "select * from event_communication where ( event_id = ?  and reason_for_rejection = ? and communication_flag =1)"; 
+				 			String record_in_Database = "select * from event_communication where ( event_id = ?  and message = ? and communication_flag =1)"; 
 				 						 			
 				 			Connection con = (Connection) GetConnection.getConnection();
 					 		
@@ -189,7 +193,7 @@ public class Principal_Decision extends HttpServlet {
 						 	}
 						 	
 					
-						 	if(session.getAttribute("username").equals("principal"))
+						 	if(session.getAttribute("username").equals("princi"))
 						 		st.setInt(4 , 1 ); 										  // flag = 1 ==> Principal Message.
 						 	else
 						 		st.setInt(4 , 0);

@@ -109,30 +109,41 @@
         </ul>
       </nav>
     </header>
-
     <div class="d-flex align-items-stretch">
       <div id="sidebar" class="sidebar py-3">
         <ul class="sidebar-menu list-unstyled">
-              <li class="sidebar-list-item"><a href="DashBoard.jsp" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
+              <li class="sidebar-list-item"><a href="index.html" class="sidebar-link text-muted active"><i class="o-home-1 mr-3 text-gray"></i><span>Home</span></a></li>
               <!-- <li class="sidebar-list-item"><a href="tables.html" class="sidebar-link text-muted"><i class="o-table-content-1 mr-3 text-gray"></i><span>Tables</span></a></li> -->
-              <li class="sidebar-list-item"><a href="form.jsp" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
+              <li class="sidebar-list-item"><a href="forms.html" class="sidebar-link text-muted"><i class="o-survey-1 mr-3 text-gray"></i><span>New Event</span></a></li>
+
+          <li class="sidebar-list-item"><a href="#" data-toggle="collapse" data-target="#pages1" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted"><i class="o-wireframe-1 mr-3 text-gray"></i><span>Classroom Proposals</span></a>
+            <div id="pages1" class="collapse">
+              <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
+                <li class="sidebar-list-item"><a href="room_prop_new.html" class="sidebar-link text-muted pl-lg-5">New Proposals</a></li>
+                <li class="sidebar-list-item"><a href="room_prop_past.html" class="sidebar-link text-muted pl-lg-5">Past Proposals</a></li>
+            </div>
+          </li>
+
           <li class="sidebar-list-item"><a href="#" data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages" class="sidebar-link text-muted"><i class="o-wireframe-1 mr-3 text-gray"></i><span>Events</span></a>
             <div id="pages" class="collapse">
               <ul class="sidebar-menu list-unstyled border-left border-primary border-thick">
                 <li class="sidebar-list-item"><a href="past_events.html" class="sidebar-link text-muted pl-lg-5">Past Events</a></li>
-                <li class="sidebar-list-item"><a href="upcoming_events.html" class="sidebar-link text-muted pl-lg-5">My Events</a></li>
+                <li class="sidebar-list-item"><a href="my_events.html" class="sidebar-link text-muted pl-lg-5">My Events</a></li>
             </div>
           </li>
               <li class="sidebar-list-item"><a href="login.html" class="sidebar-link text-muted"><i class="o-exit-1 mr-3 text-gray"></i><span>Login</span></a></li>
         </ul>
       </div>
+
       <div class="page-holder w-100 d-flex flex-wrap">
         <div class="container-fluid px-xl-5">
-			
-		          <section class="py-5">
-           <div class="row">
+
+          <!-- My Events Summary Table -->
+
+          <section class="py-5">
+            <div class="row">
               <div class="col-lg-12 mb-4">
-                <div class="card">
+     <div class="card">
                   <div class="card-header">
                     <div class="row">
                       <div class="col-md-6">
@@ -165,13 +176,13 @@
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where username= ? and status_level < 6  order by start_date desc limit 5";
+		                  		String sql = "select * from event_ledger where status_level = 4  order by start_date desc ";
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");
 		                  		
 		                  		
-		                  		st.setString(1,Username);
+		                  		
 		                  		rs = st.executeQuery();
 		                  		while(rs.next())
 		                  		{
@@ -185,7 +196,7 @@
 		                          <td class="text-center"><%= rs.getDate(7)  %></td>
 		                          <td class="text-center"><%= rs.getDate(8)  %></td>
 		                        
-		                         <form action="my_events_detail.jsp" method="post">
+		                         <form action="room_selection_prop.jsp" method="post">
                           			<td style="max-width=100%;"><button class="btn-sm btn-primary pull-right mx" value ="<%= rs.getInt(1)  %>" name="btn">View</button></td>
              					</form>
                        		 	</tr>
@@ -205,87 +216,112 @@
                     </table>
                   </div>
                 </div>
+                
               </div>
             </div>
           </section>
-		
-			
-        <!--   <section class="py-4">
-          </section> -->
 
-
-           <section class="py-3">
-          </section>
- 
- 		<section>
+          <section class="">
             <div class="row">
-               <div class="col-lg-6">
+              <div class="col-lg-12 mb-4">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">My Events</a></h6>
+                    <h6 class="text-uppercase mb-0" id="classroom">Classroom/Labs Approvals</h6>
                   </div>
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  <c:set var="count" value="0" scope="page" />
-                  
-                  <div class="card-body">                          
-                    <table class="table table-striped table-md card-text">
-                    
+                  <div class="card-body">                           
+                    <table class="table table-striped card-text">
                       <thead>
                         <tr>
-                          <th class="text-center">Sr.No</th>
-                          <th class="text-center">Event Name</th>
-                          <th class="text-center">Start Date</th>
-                          <th class="text-center">End Date</th>
+                          <th>#</th>
+                          <th>Sender Name</th>
+                          <th>Event Name</th>
+                          <th>Permission</th>
                         </tr>
                       </thead>
                       <tbody>
-                      <%
-		                  	 con 		 = null;
-                      		 st = null;
-		                  	 rs 		 = null;
-		                
-		                   	
-		                  	try
-		                  	{
-		                  		String sql = "select * from event_ledger where username= ? order by start_date asc limit 5";
-		                  		con = (Connection) GetConnection.getConnection();
-		                  		st = con.prepareStatement(sql);
-		                  		String Username =(String)session.getAttribute("username");
-		                  		
-		                  		
-		                  		st.setString(1,Username);
-		                  		rs = st.executeQuery();
-		                  		while(rs.next())
-		                  		{
-		                  			
-		                  %>
-		                  			
-		                  	
-		                  		<tr class="text-center">
-		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-		                          <td class="text-center"><%= rs.getString(2)  %></td>
-		                          <td class="text-center"><%= rs.getDate(7)  %></td>
-		                          <td class="text-center"><%= rs.getDate(8)  %></td>
-                       		 	</tr>
-		                  <% 	
-		                  		}
-		                  		
-		                  	}
-		                  	catch(Exception ex)
-		                  	{
-		                  		
-		                  	}
-                  	
-                 	 %>
-                 
-                      
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td><a href="room_selection_prop.html"><button class="btn-sm btn-primary">View</button></a></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td><a href="room_selection_prop.html"><button class="btn-sm btn-primary">View</button></a></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td><a href="room_selection_prop.html"><button class="btn-sm btn-primary">View</button></a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="py-3">
+          </section>
+
+          <section>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="text-uppercase mb-0"><a href="past_events.html">Past Events</a></h6>
+                  </div>
+                  <div class="card-body">                          
+                    <table class="table table-striped table-sm card-text">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Username</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter      </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">4</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">5</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">6</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -297,145 +333,62 @@
                   <div class="card-header">
                     <h6 class="text-uppercase mb-0"><a href="upcoming_events.html">Upcoming/Ongoing Events</a></h6>
                   </div>
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  <c:set var="count" value="0" scope="page" />
-                  
                   <div class="card-body">                          
-                    <table class="table table-striped table-md card-text table table-hover">
-                    
+                    <table class="table table-striped table-sm card-text">
                       <thead>
                         <tr>
-                          <th class="text-center">Sr.No</th>
-                          <th class="text-center">Event Name</th>
-                          <th class="text-center">Start Date</th>
-                          <th class="text-center">End Date</th>
+                          <th>#</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Username</th>
                         </tr>
                       </thead>
                       <tbody>
-                      <%
-		                  	 con 				 = null;
-		                  	 st 				 = null;
-		                  	 rs 				 = null;
-		                  	 ResultSet rs_1 	 = null;
-		                  	 ResultSet  row_num	 = null;
-		                   	
-		                  	try
-		                  	{
-		                  		String query_1 = "select * from event_ledger order by start_date asc limit 5";
-		                  		
-		                  		String  query_2 = "select * from (select * from event_ledger order by start_date limit 5) as t where t.username= ? ";
-		                  		
-		                  		String  query_3 = "select * from event_ledger where username = ? order by start_date limit 1 ";
-		                  		
-		                  		String get_row_number = "call get_row_number(?)";
-		                  		
-		                  		con = (Connection) GetConnection.getConnection();
-		                  		
-		                  		st = con.prepareStatement(query_1);
-		                  		
-		                  		PreparedStatement st_1 = con.prepareStatement(query_2);
-		                  		
-		                  		String username = (String)session.getAttribute("username");
-		                  		
-		                  		st_1.setString(1,username);
-		                  		
-		                  		rs = st.executeQuery();
-		                  		
-		                  		rs_1 = st_1.executeQuery();
-		                  		
-		                  		int i = 1 , flag = 0;
-		                  		
-		                  		st_1 = null;
-		                  		
-		                  		st_1 = con.prepareStatement(get_row_number);
-		                  		
-		                  		st_1.setString(1,username);
-		                  		
-		                  		row_num = st_1.executeQuery();
-		                  		
-		                  		row_num.next();
-		                  		
-		                  		// rs_1.absolute(1) ==> True if it has some record ==> User having event in top 5 event 
-		                  		
-		                  		// rs_1.absolute(1) ==> Fasle if it is an empty set ==> 
-		                  		// We have to find First Upcoming Event of a user to show it in last record in Upcoming/OnGoing table ===> 
-		                  		// So we have to fetch it's details. 
-		                  		
-		                  		if(!rs_1.absolute(1))
-		                  		{
-		                  			st_1 = con.prepareStatement(query_3);
-		                  			st_1.setString(1,(String)session.getAttribute("username"));
-		                  			rs_1 = st_1.executeQuery();
-		                  			st_1 = con.prepareStatement(query_3);
-		                  			
-		                  		}else{
-		                  			i=6;
-		                  		}
-		                  		
-		                  		
-		                  		
-		                  		while(rs.next())
-			                  		{
-		                  				if(rs_1.absolute(1) && i == 5) {
-		                  					
-		                  					/*  if( rs_1.getString(1).equals(username) )*/
-			                  %>			
-					                  		<tr bgcolor="#FFF000"  class="text-center " >
-					                          <th bgcolor="#FFF000" scope="row"> <%= row_num.getInt(1) %> </th>
-					                          <td bgcolor="#FFF000" class="text-center dark-2" ><%= rs_1.getString(2)  %></td>
-					                          <td bgcolor="#FFF000" class="text-center" ><%= rs_1.getDate(7)  %></td>
-					                          <td bgcolor="#FFF000" class="text-center"><%= rs_1.getDate(8)  %></td>
-			                       		 	</tr>
-			                  <% 	
-		                  				}
-		                  				else 
-		                  				{	
-		                  					if(!username.equals(rs.getString(4)))
-		                  					{
-		                  					%>
-		                  					<tr  class="text-center">
-					                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-					                          <td class="text-center"><%= rs.getString(2)  %></td>
-					                          <td class="text-center"><%= rs.getDate(7)  %></td>
-					                          <td class="text-center"><%= rs.getDate(8)  %></td>
-					                          
-			                       		 	</tr>
-		                  					<% 
-		                  					}
-		                  					else{
-			                  					
-			                  					/*  if( rs_1.getString(1).equals(username) )*/
-				                  %>			
-						                  		<tr bgcolor="#FFF000"  class="text-center " >
-						                          <th bgcolor="#FFF000" scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
-						                          <td bgcolor="#FFF000" class="text-center dark-2" ><%= rs.getString(2)  %></td>
-						                          <td bgcolor="#FFF000" class="text-center" ><%= rs.getDate(7)  %></td>
-						                          <td bgcolor="#FFF000" class="text-center"><%= rs.getDate(8)  %></td>
-				                       		 	</tr>
-				                  <% 	
-			                  				}
-		                  				}
-		                  				i++;
-			                  		}		                  		
-		                  	}
-		                  	catch(Exception ex)
-		                  	{
-		                  		
-		                  	}
-                 	 %>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter      </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">4</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">5</th>
+                          <td>Jacob</td>
+                          <td>Thornton</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">6</th>
+                          <td>Larry</td>
+                          <td>the Bird</td>
+                          <td>@twitter</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
+          </section>
+
+          <section class="py-3">
           </section>
 
           <section class="py-3">
@@ -468,6 +421,4 @@
     <script src="js/charts-home.js"></script>
     <script src="js/front.js"></script>
   </body>
-</html> 
-
-
+</html>

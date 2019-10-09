@@ -265,7 +265,7 @@
 
                     <div class="row">
                       <div class="col-md-12">
-                          <form action="Principal_Decision" onsubmit="validate()" method="post">
+                          <form action="Principal_Decision" method="post">
                             <div class="form-group">
                               <div class="row">
                                 <div class="col-md-3"></div>
@@ -302,7 +302,7 @@
                             <div class="row">
                               <div class="col-md-10"></div>
                               <div class="form-group col-md-2">       
-                                <button type="submit" class="btn btn-primary">Send</button>
+                                <button type="submit" class="btn btn-primary" value="<%= rs_1.getInt(1)  %>" name="btn">Send</button>
                               </div>
                             </div>
                           </form>
@@ -311,13 +311,14 @@
 
                   </div>
                   <% 	
+                  System.out.print("//////////////////////");
 			
 		                  		}
 		                  		
 		                     }
 		                  	
 		                  	catch(Exception ex)
-		                  	{
+		                  	{	
 		                  			out.print(ex);
 		                  	}
                   	
@@ -365,7 +366,7 @@
             		
             		
 
-            		String sql_1 = "select reason_for_rejection , communication_flag from event_communication where event_id = ? order by communication_number desc";
+            		String sql_1 = "select message , communication_flag from event_communication where event_id = ? order by communication_number desc";
             		
             		String sql_2 = "select name from users where username  = (select username from event_ledger where event_id = ? ) ";
             		

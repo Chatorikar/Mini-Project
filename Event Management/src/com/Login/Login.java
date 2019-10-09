@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
 					response.sendRedirect("DashBoard_Principal.jsp");
 					break;
 				default:
-					response.sendRedirect("DashBoard.jsp");
+					response.sendRedirect("DashBoard_HOD.jsp");
 					break;
 			}
 			
