@@ -52,7 +52,11 @@ public class Login extends HttpServlet {
 		else
 		{	
 			session.invalidate();
-			response.sendRedirect("Login.jsp");
+			boolean err =  true;
+			request.setAttribute("message", err);
+			request.getRequestDispatcher("/Login.jsp").forward(request, response);
+			
+			//response.sendRedirect("Login.jsp");
 		}
 		
 	}

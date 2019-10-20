@@ -50,7 +50,7 @@
             <h2 class="mb-4">Welcome back!</h2>
             <p class="text-muted">Organize all Events is Systematic Manner</p>
             <form id="loginForm" action="Login" class="mt-4" method="post">
-
+				<p>Message: ${message}</p>
               <div class="form-group mb-4">
                 <input type="text" name="uname" placeholder="Username or Email address" class="form-control border-0 shadow form-control-lg">
               </div>

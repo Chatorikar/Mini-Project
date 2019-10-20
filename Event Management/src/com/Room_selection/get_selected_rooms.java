@@ -34,7 +34,7 @@ public class get_selected_rooms extends HttpServlet {
 		String event_id = (String) session.getAttribute("event_id");
 		
 		System.out.print(event_id);
-		String sql = " insert into slots_and_details values(?,?,1,1,?,?,?,?)";
+		String sql = " insert into slots_and_details values(?,?,1,1,?,?,?)";
 		
 		
 		
@@ -73,8 +73,8 @@ public class get_selected_rooms extends HttpServlet {
 				
 				
 				
-				Insert_into_slots_and_details.setTimestamp(5, new java.sql.Timestamp(new java.util.Date().getTime()));
-				Insert_into_slots_and_details.setTimestamp(6, new java.sql.Timestamp(new java.util.Date().getTime()));
+				//Insert_into_slots_and_details.setTimestamp(5, new java.sql.Timestamp(new java.util.Date().getTime()));
+				//Insert_into_slots_and_details.setTimestamp(6, new java.sql.Timestamp(new java.util.Date().getTime()));
 				
 			
 				System.out.println("]]ssssssssss]]]]]]]]]]]");
@@ -88,6 +88,26 @@ public class get_selected_rooms extends HttpServlet {
 				System.out.println((String) request.getParameter("description"+selectedStudentIds[i] ));
 				
 				System.out.println((String) request.getParameter("time"+selectedStudentIds[i] ));
+ 				String s = (String) request.getParameter("time"+selectedStudentIds[i] );
+				
+ 				String temp[] = s.split(" ");
+				
+				if(s.equals("09:00 to 13:00"))
+					Insert_into_slots_and_details.setInt(5,1);
+ 				
+				if(s.equals("13:00 to 18:00"))
+					Insert_into_slots_and_details.setInt(5,2);
+				
+				if(s.equals("09:00 to 18:00"))
+					Insert_into_slots_and_details.setInt(5,3);
+ 				
+//				if(temp[2].equals("18:00"))
+//					Insert_into_slots_and_details.setInt(5,3);
+//				else if(temp[0].equals("9:00"))
+//					Insert_into_slots_and_details.setInt(5,1);
+//				else 
+//					Insert_into_slots_and_details.setInt(5,2);
+					
 				
 				Insert_into_slots_and_details.executeUpdate();
 				

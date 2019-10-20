@@ -143,7 +143,7 @@
           <section class="py-5">
             <div class="row">
               <div class="col-lg-12 mb-4">
-     <div class="card">
+     			<div class="card">
                   <div class="card-header">
                     <div class="row">
                       <div class="col-md-6">
@@ -220,13 +220,180 @@
               </div>
             </div>
           </section>
+          
+           <section class="py-5">
+            <div class="row">
+              <div class="col-lg-12 mb-4">
+     			<div class="card">
+                  <div class="card-header">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6 class="text-uppercase mb-0">9AM-1PM (Conflict)</h6>
+                      </div>
+                      <div class="col-md-5 text-right">
+                        <a href="my_events.jsp"><h6 class="text-uppercase mb-0">View All</h6></a>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card-body">                           
+                 <table class="table table-striped table-md card-text">
+                    
+                      <thead>
+                        <tr>
+                          <th class="text-center">Sr.No</th>
+                          <th class="text-center">Event Name</th>
+                          <th class="text-center">Start Date</th>
+                          <th class="text-center">End Date</th>
+                          <th class="text-center">Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <%
+                      		 con = null;
+                      		 st  = null;
+                      		 rs  = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = " select distinct T.event_id,T.event_name , T.description ,  T.room_id,T.start_date,T.end_date from (select el.event_id, el.event_name , el.description ,  room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as T,(select el.event_id,el.event_name , el.description , room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as F where T.event_id != F.event_id and T.start_date = F.start_date";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		String Username =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  			
+		                  %>
+		                  			
+		                  	
+		                  		<tr class="text-center">
+		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+		                          <td class="text-center"><%= rs.getString(2)  %></td>
+		                          <td class="text-center"><%= rs.getDate(5)  %></td>
+		                          <td class="text-center"><%= rs.getDate(6)  %></td>
+		                        
+		                         <form action="room_selection_prop.jsp" method="post">
+                          			<td style="max-width=100%;"><button class="btn-sm btn-primary pull-right mx" value ="<%= rs.getInt(1)  %>" name="btn">View</button></td>
+             					</form>
+                       		 	</tr>
+		                  <% 	
+		                  		}
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		ex.printStackTrace();
+		                  	}
+                  	
+                 	 %>
+                 
+                      
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </section>
+			
+		<section class="py-5">
+            <div class="row">
+              <div class="col-lg-12 mb-4">
+     			<div class="card">
+                  <div class="card-header">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6 class="text-uppercase mb-0">1AM-5PM (Conflict)</h6>
+                      </div>
+                      <div class="col-md-5 text-right">
+                        <a href="my_events.jsp"><h6 class="text-uppercase mb-0">View All</h6></a>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card-body">                           
+                 <table class="table table-striped table-md card-text">
+                    
+                      <thead>
+                        <tr>
+                          <th class="text-center">Sr.No</th>
+                          <th class="text-center">Event Name</th>
+                          <th class="text-center">Start Date</th>
+                          <th class="text-center">End Date</th>
+                          <th class="text-center">Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <%
+                      		 con = null;
+                      		 st  = null;
+                      		 rs  = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql = " select distinct T.event_id,T.event_name , T.description ,  T.room_id,T.start_date,T.end_date from (select el.event_id, el.event_name , el.description ,  room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 2) as T,(select el.event_id,el.event_name , el.description , room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 2) as F where T.event_id != F.event_id and T.start_date = F.start_date";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql);
+		                  		String Username =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		
+		                  		rs = st.executeQuery();
+		                  		while(rs.next())
+		                  		{
+		                  			
+		                  %>
+		                  			
+		                  	
+		                  		<tr class="text-center">
+		                          <th scope="row">  <c:set var="count" value="${count + 1}" scope="page"/> ${count} </th>
+		                          <td class="text-center"><%= rs.getString(2)  %></td>
+		                          <td class="text-center"><%= rs.getDate(5)  %></td>
+		                          <td class="text-center"><%= rs.getDate(6)  %></td>
+		                        
+		                         <form action="room_selection_prop.jsp" method="post">
+                          			<td style="max-width=100%;"><button class="btn-sm btn-primary pull-right mx" value ="<%= rs.getInt(1)  %>" name="btn">View</button></td>
+             					</form>
+                       		 	</tr>
+		                  <% 	
+		                  		}
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		ex.printStackTrace();
+		                  	}
+                  	
+                 	 %>
+                 
+                      
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </section>
+			
+			
+			          
+          
+          
 
           <section class="">
             <div class="row">
               <div class="col-lg-12 mb-4">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="text-uppercase mb-0" id="classroom">Classroom/Labs Approvals</h6>
+                    <h6 class="text-uppercase mb-0" id="classroom">Classroom/Labs Approvals ()</h6>
                   </div>
                   <div class="card-body">                           
                     <table class="table table-striped card-text">

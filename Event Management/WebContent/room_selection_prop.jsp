@@ -37,7 +37,6 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/logo.png">
     <script>
-
     if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
     }
@@ -49,7 +48,6 @@
   margin: 0;
   padding: 0;
 }
-
 .seat {
   float: left;
   display: block;
@@ -59,7 +57,6 @@
   width: 60px;
   height: 60px;
 }
-
 .seat1 {
   float: left;
   display: block;
@@ -69,7 +66,6 @@
   width: 60px;
   height: 135px;
 }
-
 .seat2 {
   float: left;
   display: block;
@@ -79,7 +75,6 @@
   width: 135px;
   height: 360px;
 }
-
 input:disabled {
   display: block;
   margin: 5px;
@@ -88,23 +83,18 @@ input:disabled {
   width: 100px;
   height: 110px;
 }
-
 .seat-select {
   display: none;
 }
-
 .seat-select:checked+.seat {
   background: #536DFE;
 }
-
 .seat-select:checked+.seat1 {
   background: #536DFE;
 }
-
 .seat-select:checked+.seat2 {
   background: #536DFE;
 }
-
 </style>
     
   </head>
@@ -467,8 +457,24 @@ s
 
                       <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-5 mx-auto">
-                          <button type="reset" id="refresh" class="btn btn-secondary ml-4 mr-2">Clear</button>
-                          <button type="submit" class="btn btn-primary ml-2">Submit</button>
+                       <form action="Reject_Other" method="post">
+                            <div class="form-group">
+                              <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="custom-control custom-radio custom-control-inline col-md-3">
+                                  <input id="customRadioInline11" type="radio" name="customRadioInline11" class="custom-control-input" value="1" >
+                                  <label for="customRadioInline11" class="custom-control-label"><h4>Accept</h4></label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline col-md-3">
+                                  <input id="customRadioInline22" type="radio" name="customRadioInline11" class="custom-control-input" value="0" >
+                                  <label for="customRadioInline22" class="custom-control-label"><h4>Reject</h4></label>
+                                </div>
+                                <div class="col-md-3">
+                                <input type="submit" class="btn btn-primary ml-2">Submit</button>
+                                </div>
+                              </div>
+                            </div>
+                            </form>
                         </div>
                       </div>
                     </form>
@@ -702,9 +708,7 @@ s
         $("#refresh").click(function () { 
           location.reload(true); 
         }); 
-
       });
-
     </script>
   </body>
 </html>
