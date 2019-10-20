@@ -112,7 +112,7 @@ CREATE TABLE `event_ledger` (
   PRIMARY KEY (`event_id`),
   KEY `username` (`username`),
   CONSTRAINT `event_ledger_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `event_ledger` (
 
 LOCK TABLES `event_ledger` WRITE;
 /*!40000 ALTER TABLE `event_ledger` DISABLE KEYS */;
-INSERT INTO `event_ledger` VALUES (1,'A1','sdfvs','aj10',4,1,'2018-08-10','2018-08-11'),(2,'A2','sdfvs','aj10',4,1,'2017-08-10','2017-08-11'),(3,'A3','sdfvs','aj10',4,1,'2016-08-10','2016-08-11'),(4,'A4','sdfvs','aj10',4,1,'2015-08-10','2015-08-11'),(5,'A5','sdfvs','aj10',3,1,'2014-08-10','2014-08-11'),(6,'P1','sad','ap',3,1,'2013-08-11','2013-08-12'),(7,'T1','sadsa','test',6,1,'2020-08-10','2020-08-11'),(8,'Csd','dsadsa','test',5,1,'2019-10-23','2019-10-26'),(9,'Testtn','Test','aj10',4,1,'2019-10-12','2019-10-27'),(10,'New','New','aj10',4,1,'2019-11-02','2019-11-09'),(11,'Omkar_event','Omkar_event','aj10',4,1,'2019-10-18','2019-11-02'),(12,'test','test','test',4,1,'2019-10-19','2019-10-20'),(13,'Alumi Meet','Alumi Meet','test',4,1,'2019-10-22','2019-10-26'),(14,'Ayan','q','test',4,1,'2019-10-25','2019-10-31');
+INSERT INTO `event_ledger` VALUES (1,'A1','sdfvs','aj10',4,1,'2018-08-10','2018-08-11'),(2,'A2','sdfvs','aj10',4,1,'2017-08-10','2017-08-11'),(3,'A3','sdfvs','aj10',4,1,'2016-08-10','2016-08-11'),(4,'A4','sdfvs','aj10',4,1,'2015-08-10','2015-08-11'),(5,'A5','sdfvs','aj10',3,1,'2014-08-10','2014-08-11'),(6,'P1','sad','ap',3,1,'2013-08-11','2013-08-12'),(7,'T1','sadsa','test',6,1,'2020-08-10','2020-08-11'),(8,'Csd','dsadsa','test',5,1,'2019-10-23','2019-10-26'),(9,'Testtn','Test','aj10',4,1,'2019-10-12','2019-10-27'),(10,'New','New','aj10',3,1,'2019-11-02','2019-11-09'),(11,'Omkar_event','Omkar_event','aj10',4,1,'2019-10-18','2019-11-02'),(12,'test','test','test',4,1,'2019-10-19','2019-10-20'),(13,'Alumi Meet','Alumi Meet','test',4,1,'2019-10-19','2019-10-26'),(14,'Ayan','q','test',4,1,'2019-10-25','2019-10-31'),(15,'sadas','ewq','aj10',4,1,'2019-11-02','2019-11-07'),(16,'8','8','aj10',1,1,'2019-10-26','2019-11-03');
 /*!40000 ALTER TABLE `event_ledger` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,7 +255,6 @@ CREATE TABLE `resource_communication` (
 
 LOCK TABLES `resource_communication` WRITE;
 /*!40000 ALTER TABLE `resource_communication` DISABLE KEYS */;
-INSERT INTO `resource_communication` VALUES (12,'Respected Sir',1,0),(12,'Ok you can continue.',2,1),(14,'Please',1,0);
 /*!40000 ALTER TABLE `resource_communication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -402,8 +401,7 @@ CREATE TABLE `slots_and_details` (
   `prev_status_level` int(11) NOT NULL,
   `purpose` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `purpose_explained` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time_slot_start` int(11) DEFAULT NULL,
-  `time_slot_end` int(11) DEFAULT NULL,
+  `time_slot` int(11) DEFAULT NULL,
   KEY `fk1` (`room_id`),
   KEY `fk3` (`event_id`),
   CONSTRAINT `fk1` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`),
@@ -417,7 +415,7 @@ CREATE TABLE `slots_and_details` (
 
 LOCK TABLES `slots_and_details` WRITE;
 /*!40000 ALTER TABLE `slots_and_details` DISABLE KEYS */;
-INSERT INTO `slots_and_details` VALUES (10,9,1,1,'','',1,2),(11,9,1,1,'','',1,2),(12,9,1,1,'','',2,2),(13,9,1,1,'','',2,2),(14,9,1,1,'','',3,2),(14,5,1,1,'','',3,2);
+INSERT INTO `slots_and_details` VALUES (11,9,1,1,'','',NULL),(12,9,1,1,'','',NULL),(13,9,1,1,'','',NULL),(14,9,1,1,'','',NULL),(14,5,1,1,'','',NULL),(2,3,1,1,'3 ','',1),(2,4,1,1,'4 ','',1),(11,8,1,1,'8 ','',3),(12,8,1,1,'8 ','',2),(12,9,1,1,'9 ','',2),(13,8,1,1,'8 ','',2),(13,9,1,1,'9 ','',2),(14,8,1,1,'8 ','',2),(14,5,1,1,'5 ','',2),(14,3,1,1,'3 ','',3),(14,4,1,1,'4 ','',2),(15,9,1,1,'9 ','',1);
 /*!40000 ALTER TABLE `slots_and_details` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -534,4 +532,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-14 21:23:11
+-- Dump completed on 2019-10-20 19:04:08
