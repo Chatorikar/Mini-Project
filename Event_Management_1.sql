@@ -65,7 +65,7 @@ CREATE TABLE `event_communication` (
 
 LOCK TABLES `event_communication` WRITE;
 /*!40000 ALTER TABLE `event_communication` DISABLE KEYS */;
-INSERT INTO `event_communication` VALUES (12,'Keep it up',1,1),(12,'Thank you sir',2,0),(13,'Disscuss',1,1),(14,'Keep it up',1,1),(14,'Thanks Bhai',2,0),(1,'OK',1,0);
+INSERT INTO `event_communication` VALUES (12,'Keep it up',1,1),(12,'Thank you sir',2,0),(13,'Disscuss',1,1),(14,'Keep it up',1,1),(14,'Thanks Bhai',2,0),(1,'OK',1,0),(11,'Hello',1,1),(11,'Thank you sir',2,0),(10,'Hi',1,0);
 /*!40000 ALTER TABLE `event_communication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +112,7 @@ CREATE TABLE `event_ledger` (
   PRIMARY KEY (`event_id`),
   KEY `username` (`username`),
   CONSTRAINT `event_ledger_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `event_ledger` (
 
 LOCK TABLES `event_ledger` WRITE;
 /*!40000 ALTER TABLE `event_ledger` DISABLE KEYS */;
-INSERT INTO `event_ledger` VALUES (1,'A1','sdfvs','aj10',4,1,'2018-08-10','2018-08-11'),(2,'A2','sdfvs','aj10',4,1,'2017-08-10','2017-08-11'),(3,'A3','sdfvs','aj10',4,1,'2016-08-10','2016-08-11'),(4,'A4','sdfvs','aj10',4,1,'2015-08-10','2015-08-11'),(5,'A5','sdfvs','aj10',3,1,'2014-08-10','2014-08-11'),(6,'P1','sad','ap',3,1,'2013-08-11','2013-08-12'),(7,'T1','sadsa','test',6,1,'2020-08-10','2020-08-11'),(8,'Csd','dsadsa','test',5,1,'2019-10-23','2019-10-26'),(9,'Testtn','Test','aj10',4,1,'2019-10-12','2019-10-27'),(10,'New','New','aj10',3,1,'2019-11-02','2019-11-09'),(11,'Omkar_event','Omkar_event','aj10',4,1,'2019-10-18','2019-11-02'),(12,'test','test','test',4,1,'2019-10-19','2019-10-20'),(13,'Alumi Meet','Alumi Meet','test',4,1,'2019-10-19','2019-10-26'),(14,'Ayan','q','test',4,1,'2019-10-25','2019-10-31'),(15,'sadas','ewq','aj10',4,1,'2019-11-02','2019-11-07'),(16,'8','8','aj10',1,1,'2019-10-26','2019-11-03');
+INSERT INTO `event_ledger` VALUES (1,'A1','sdfvs','aj10',3,1,'2018-08-10','2018-08-11'),(2,'A2','sdfvs','aj10',3,1,'2017-08-10','2017-08-11'),(3,'A3','sdfvs','aj10',3,1,'2016-08-10','2016-08-11'),(4,'A4','sdfvs','aj10',3,1,'2015-08-10','2015-08-11'),(5,'A5','sdfvs','aj10',3,1,'2014-08-10','2014-08-11'),(6,'P1','sad','ap',3,1,'2013-08-11','2013-08-12'),(7,'T1','sadsa','test',3,1,'2020-08-10','2020-08-11'),(8,'Csd','dsadsa','test',3,1,'2019-10-23','2019-10-26'),(9,'Testtn','Test','aj10',3,1,'2019-10-12','2019-10-27'),(10,'New','New','aj10',3,1,'2019-11-02','2019-11-09'),(11,'Omkar_event','Omkar_event','aj10',3,1,'2019-10-18','2019-11-02'),(12,'test','test','test',3,1,'2019-10-19','2019-10-20'),(13,'Alumi Meet','Alumi Meet','test',3,1,'2019-10-19','2019-10-26'),(14,'Ayan','q','test',3,1,'2019-10-25','2019-10-31'),(15,'sadas','ewq','aj10',3,1,'2019-11-02','2019-11-07'),(16,'8','8','aj10',3,1,'2019-10-26','2019-11-03'),(17,'k','k','aj10',3,1,'2019-10-22','2019-10-23'),(18,'l','','aj10',3,1,'2019-10-22','2019-10-24'),(19,'q','q','aj10',3,1,'2019-10-22','2019-10-25');
 /*!40000 ALTER TABLE `event_ledger` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,7 +178,7 @@ CREATE TABLE `misc_ledger` (
 
 LOCK TABLES `misc_ledger` WRITE;
 /*!40000 ALTER TABLE `misc_ledger` DISABLE KEYS */;
-INSERT INTO `misc_ledger` VALUES (2,1,'2019-10-25','OK',3,'2019-10-27'),(2,2,'2019-10-25','OK',1,'2019-10-27'),(9,1,'2019-10-17','OK',1,'2019-10-11'),(9,2,'2019-10-17','OK',3,'2019-10-11'),(1,1,'2019-10-17','OK',3,'2019-10-24'),(1,2,'2019-10-17','OK',1,'2019-10-24'),(12,1,'2019-10-18','OK',3,'2019-10-12'),(12,2,'2019-10-18','OK',3,'2019-10-12'),(13,1,'2019-10-17','OK',3,'2019-10-18'),(13,2,'2019-10-17','OK',1,'2019-10-18'),(14,1,'2019-10-17','OK',3,'2019-10-25'),(14,2,'2019-10-17','OK',2,'2019-10-25');
+INSERT INTO `misc_ledger` VALUES (2,1,'2019-10-25','OK',3,'2019-10-27'),(2,2,'2019-10-25','OK',1,'2019-10-27'),(9,1,'2019-10-17','OK',1,'2019-10-11'),(9,2,'2019-10-17','OK',3,'2019-10-11'),(1,1,'2019-10-17','OK',3,'2019-10-24'),(1,2,'2019-10-17','OK',1,'2019-10-24'),(12,1,'2019-10-18','OK',3,'2019-10-12'),(12,2,'2019-10-18','OK',3,'2019-10-12'),(13,1,'2019-10-17','OK',3,'2019-10-18'),(13,2,'2019-10-17','OK',1,'2019-10-18'),(14,1,'2019-10-17','OK',3,'2019-10-25'),(14,2,'2019-10-17','OK',2,'2019-10-25'),(16,1,'2019-10-16','OK',1,'2019-10-17'),(16,2,'2019-10-16','OK',1,'2019-10-17');
 /*!40000 ALTER TABLE `misc_ledger` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,6 +233,29 @@ INSERT INTO `organization` VALUES ('CSI',1);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `person`
+--
+
+DROP TABLE IF EXISTS `person`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `person` (
+  `name` varchar(20) DEFAULT NULL,
+  `sal` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `person`
+--
+
+LOCK TABLES `person` WRITE;
+/*!40000 ALTER TABLE `person` DISABLE KEYS */;
+INSERT INTO `person` VALUES ('raj',10),('ra',1),('r',5),('a',3),('h',4),('e',20),('e',2),('e',30),('e',3);
+/*!40000 ALTER TABLE `person` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `resource_communication`
 --
 
@@ -255,6 +278,7 @@ CREATE TABLE `resource_communication` (
 
 LOCK TABLES `resource_communication` WRITE;
 /*!40000 ALTER TABLE `resource_communication` DISABLE KEYS */;
+INSERT INTO `resource_communication` VALUES (10,'Rejected : Try on Some another day !',1,1);
 /*!40000 ALTER TABLE `resource_communication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -415,7 +439,6 @@ CREATE TABLE `slots_and_details` (
 
 LOCK TABLES `slots_and_details` WRITE;
 /*!40000 ALTER TABLE `slots_and_details` DISABLE KEYS */;
-INSERT INTO `slots_and_details` VALUES (11,9,1,1,'','',NULL),(12,9,1,1,'','',NULL),(13,9,1,1,'','',NULL),(14,9,1,1,'','',NULL),(14,5,1,1,'','',NULL),(2,3,1,1,'3 ','',1),(2,4,1,1,'4 ','',1),(11,8,1,1,'8 ','',3),(12,8,1,1,'8 ','',2),(12,9,1,1,'9 ','',2),(13,8,1,1,'8 ','',2),(13,9,1,1,'9 ','',2),(14,8,1,1,'8 ','',2),(14,5,1,1,'5 ','',2),(14,3,1,1,'3 ','',3),(14,4,1,1,'4 ','',2),(15,9,1,1,'9 ','',1);
 /*!40000 ALTER TABLE `slots_and_details` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -532,4 +555,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-20 19:04:08
+-- Dump completed on 2019-10-22  1:12:17

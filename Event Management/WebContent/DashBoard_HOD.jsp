@@ -257,7 +257,8 @@
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = " select distinct T.event_id,T.event_name , T.description ,  T.room_id,T.start_date,T.end_date from (select el.event_id, el.event_name , el.description ,  room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as T,(select el.event_id,el.event_name , el.description , room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as F where T.event_id != F.event_id and T.start_date = F.start_date";
+		                  		String sql = "( select  distinct T.event_id,T.event_name , T.description ,  T.room_id,T.start_date,T.end_date from (select el.event_id, el.event_name , el.description ,  room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as T,(select el.event_id,el.event_name , el.description , room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as F where T.event_id != F.event_id and T.start_date = F.start_date and T.room_id = F.room_id )";
+		                  		
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");

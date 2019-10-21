@@ -165,7 +165,7 @@
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where username= ? and status_level < 6  order by start_date desc limit 5";
+		                  		String sql = "select * from event_ledger where username= ? and status_level < 6  order by start_date desc limit 6";
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");

@@ -39,16 +39,152 @@ public class Reject_Other extends HttpServlet {
 		if(Decision == 1)
 		{
 			try {
+					String update_event_ledger_1 = "update event_ledger set status_level = 5 where event_id = ? ";
 					String sql = " select distinct T.event_id,T.event_name , T.description ,  T.room_id,T.start_date,T.end_date from (select el.event_id, el.event_name , el.description ,  room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as T,(select el.event_id,el.event_name , el.description , room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as F where T.event_id != F.event_id and T.start_date = F.start_date";
 					Connection	con = (Connection) GetConnection.getConnection();
 					PreparedStatement	st = con.prepareStatement(sql);
 					ResultSet rs = st.executeQuery();
 					ResultSet rs_temp = null;
+					ResultSet rs_update_event_ledger = null;
+					PreparedStatement st_update_event_ledger  = con.prepareStatement(update_event_ledger_1);
+					st_update_event_ledger.setInt(1, Integer.parseInt(event_id));
+					st_update_event_ledger.executeUpdate();
+					
+					if(!rs.absolute(1))
+					{
+						String change_status_level = "select max(communication_number) from resource_communication where event_id = ?";
+						
+					 	String record_in_Database = "select * from resource_communication where ( event_id = ?  and message = ? and communication_flag =1)"; 
+						
+						
+					 	
+					 	PreparedStatement check_record_in_Database = (PreparedStatement) con.prepareStatement(record_in_Database);
+						
+						check_record_in_Database.setInt(1, Integer.parseInt(event_id)); 
+						
+					//	System.out.print(Integer.parseInt(event_id));
+						
+						check_record_in_Database.setString(2, "Permissin Granted : Best Of Luck !"  ); 		
+
+						ResultSet Check_DB = check_record_in_Database.executeQuery();
+						
+						if( Check_DB.next() == true)
+						{	
+							System.out.print(Check_DB.getString(2));
+							session.setAttribute("event_id_1", event_id);	
+
+					 	
+					 	response.sendRedirect("room_selection_prop.jsp");
+						}
+						
+						PreparedStatement st_change_status_level = (PreparedStatement) con.prepareStatement(change_status_level); 			 		
+			 		
+				 		st_change_status_level.setInt(1, Integer.parseInt(event_id));
+				 		
+				 		ResultSet rs_change_status_level = st_change_status_level.executeQuery();			 		
+				 		
+				 		 st = null;
+				 		
+				 		String insert_into_event_communication = "insert into resource_communication values( ? , ? , ? , ?)";
+					 	
+				 		st = (PreparedStatement)con.prepareStatement(insert_into_event_communication);
+					 			 	         
+					 	st.setInt(1, Integer.parseInt(event_id));
+					 	
+					 	st.setString(2 , "Permissin Granted : Best Of Luck !" );     // Event description
+					 	
+					 	
+					 	if(rs_change_status_level.next() == false)  				 // if result set is empty
+				 		{	
+					 		st.setInt(3 , 1 );										  // Communication number
+				 		}
+					 	else {
+					 	
+					 		int current_status = rs_change_status_level.getInt(1); // if ongoing Communication
+				 			current_status++;
+				 			st.setInt(3 , current_status );	
+					 	}
+					 	
+
+					 	if(session.getAttribute("username").equals("hod"))
+					 		st.setInt(4 , 1 ); 										  // flag = 1 ==> hod Message.
+					 	else
+					 		st.setInt(4 , 0);
+					 	
+					 	
+					 	int i = st.executeUpdate();	
+					 	
+					}
 					while(rs.next())
 					{
-						if(rs.getInt(1) == Integer.parseInt(event_id) )
+						if(rs.getInt(1) == Integer.parseInt(event_id) ) 
+						{
+							
+
+						 	String change_status_level = "select max(communication_number) from resource_communication where event_id = ?";
+							
+						 	String record_in_Database = "select * from resource_communication where ( event_id = ?  and message = ? and communication_flag =1)"; 
+							
+							
+						 	
+						 	PreparedStatement check_record_in_Database = (PreparedStatement) con.prepareStatement(record_in_Database);
+							
+							check_record_in_Database.setInt(1, rs.getInt(1)); 
+							
+						//	System.out.print(Integer.parseInt(event_id));
+							
+							check_record_in_Database.setString(2, "You can go ahead ! I am with you !"  ); 		
+		
+							ResultSet Check_DB = check_record_in_Database.executeQuery();
+							
+							if( Check_DB.next() == true)
+							{	
+								System.out.print(Check_DB.getString(2));
+								session.setAttribute("event_id_1", event_id);	
+		
+						 	
+						 	response.sendRedirect("room_selection_prop.jsp");
+							}
+							
+							PreparedStatement st_change_status_level = (PreparedStatement) con.prepareStatement(change_status_level); 			 		
+				 		
+					 		st_change_status_level.setInt(1, Integer.parseInt(event_id));
+					 		
+					 		ResultSet rs_change_status_level = st_change_status_level.executeQuery();			 		
+					 		
+					 		 st = null;
+					 		
+					 		String insert_into_event_communication = "insert into resource_communication values( ? , ? , ? , ?)";
+						 	
+					 		st = (PreparedStatement)con.prepareStatement(insert_into_event_communication);
+						 			 	         
+						 	st.setInt(1, rs.getInt(1));
+						 	
+						 	st.setString(2 , "You can go ahead ! I am with you !" );     // Event description
+						 	
+						 	
+						 	if(rs_change_status_level.next() == false)  				 // if result set is empty
+					 		{	
+						 		st.setInt(3 , 1 );										  // Communication number
+					 		}
+						 	else {
+						 	
+						 		int current_status = rs_change_status_level.getInt(1); // if ongoing Communication
+					 			current_status++;
+					 			st.setInt(3 , current_status );	
+						 	}
+						 	
+			
+						 	if(session.getAttribute("username").equals("hod"))
+						 		st.setInt(4 , 1 ); 										  // flag = 1 ==> hod Message.
+						 	else
+						 		st.setInt(4 , 0);
+						 	
+						 	
+						 	int i = st.executeUpdate();				
 							continue;
-						
+							
+						}
 						Delete_from_Slots_and_detials  = "delete from slots_and_details where event_id = ?";
 						st = con.prepareStatement(Delete_from_Slots_and_detials);
 						st.setInt(1, rs.getInt(1));
@@ -106,7 +242,9 @@ public class Reject_Other extends HttpServlet {
 						
 					 	String record_in_Database = "select * from resource_communication where ( event_id = ?  and message = ? and communication_flag =1)"; 
 						
-						PreparedStatement check_record_in_Database = (PreparedStatement) con.prepareStatement(record_in_Database);
+						
+					 	
+					 	PreparedStatement check_record_in_Database = (PreparedStatement) con.prepareStatement(record_in_Database);
 						
 						check_record_in_Database.setInt(1, rs.getInt(1)); 
 						
@@ -155,9 +293,9 @@ public class Reject_Other extends HttpServlet {
 					 	
 		
 					 	if(session.getAttribute("username").equals("hod"))
-					 		st.setInt(4 , 0 ); 										  // flag = 1 ==> hod Message.
+					 		st.setInt(4 , 1 ); 										  // flag = 1 ==> hod Message.
 					 	else
-					 		st.setInt(4 , 1);
+					 		st.setInt(4 , 0);
 					 	
 					 	
 					 	int i = st.executeUpdate();				   					  // flag = 0 ==> User Message.
@@ -174,7 +312,103 @@ public class Reject_Other extends HttpServlet {
 				e.printStackTrace();
 			}
 		}	
-		
+		else
+		{
+			try {
+				String update_event_ledger_1 = "update event_ledger set status_level = 3 where event_id = ? ";
+				//String sql = " select distinct T.event_id,T.event_name , T.description ,  T.room_id,T.start_date,T.end_date from (select el.event_id, el.event_name , el.description ,  room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as T,(select el.event_id,el.event_name , el.description , room_id,start_date,end_date,time_slot from event_ledger as el join slots_and_details as sd where el.event_id = sd.event_id and time_slot = 1) as F where T.event_id != F.event_id and T.start_date = F.start_date";
+				Connection	con = (Connection) GetConnection.getConnection();
+				PreparedStatement	st = null;
+				//ResultSet rs = st.executeQuery();
+				ResultSet rs_temp = null;
+				ResultSet rs_update_event_ledger = null;
+				PreparedStatement st_update_event_ledger  = con.prepareStatement(update_event_ledger_1);
+				st_update_event_ledger.setInt(1, Integer.parseInt(event_id));
+				st_update_event_ledger.executeUpdate();
+				Delete_from_Slots_and_detials  = "delete from slots_and_details where event_id = ?";
+				st = con.prepareStatement(Delete_from_Slots_and_detials);
+				st.setInt(1, Integer.parseInt(event_id));
+				st.executeUpdate();
+				
+				
+
+			 	String change_status_level = "select max(communication_number) from resource_communication where event_id = ?";
+				
+			 	String record_in_Database = "select * from resource_communication where ( event_id = ?  and message = ? and communication_flag =1)"; 
+				
+				
+			 	
+			 	PreparedStatement check_record_in_Database = (PreparedStatement) con.prepareStatement(record_in_Database);
+				
+				check_record_in_Database.setInt(1, Integer.parseInt(event_id)); 
+				
+			//	System.out.print(Integer.parseInt(event_id));
+				
+				check_record_in_Database.setString(2, "Rejected : Try on Some another day !"  ); 		
+
+				ResultSet Check_DB = check_record_in_Database.executeQuery();
+				
+				if( Check_DB.next() == true)
+				{	
+					System.out.print(Check_DB.getString(2));
+					session.setAttribute("event_id_1", event_id);	
+
+			 	
+			 	response.sendRedirect("room_selection_prop.jsp");
+				}
+				
+				PreparedStatement st_change_status_level = (PreparedStatement) con.prepareStatement(change_status_level); 			 		
+	 		
+		 		st_change_status_level.setInt(1, Integer.parseInt(event_id));
+		 		
+		 		ResultSet rs_change_status_level = st_change_status_level.executeQuery();			 		
+		 		
+		 		 st = null;
+		 		
+		 		String insert_into_event_communication = "insert into resource_communication values( ? , ? , ? , ?)";
+			 	
+		 		st = (PreparedStatement)con.prepareStatement(insert_into_event_communication);
+			 			 	         
+			 	st.setInt(1, Integer.parseInt(event_id));
+			 	
+			 	st.setString(2 , "Rejected : Try on Some another day !" );     // Event description
+			 	
+			 	
+			 	if(rs_change_status_level.next() == false)  				 // if result set is empty
+		 		{	
+			 		st.setInt(3 , 1 );										  // Communication number
+		 		}
+			 	else {
+			 	
+			 		int current_status = rs_change_status_level.getInt(1); // if ongoing Communication
+		 			current_status++;
+		 			st.setInt(3 , current_status );	
+			 	}
+			 	
+
+			 	if(session.getAttribute("username").equals("hod"))
+			 		st.setInt(4 , 1 ); 										  // flag = 1 ==> hod Message.
+			 	else
+			 		st.setInt(4 , 0);
+			 	
+			 	
+			 	int i = st.executeUpdate();	
+			 	
+			 	
+			 	
+			 	
+			
+	
+			response.sendRedirect("DashBoard_HOD.jsp");
+							
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+			
+		}
+			
 	}
 
 }

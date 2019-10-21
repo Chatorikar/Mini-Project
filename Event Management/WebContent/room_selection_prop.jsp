@@ -428,7 +428,7 @@ s
                                   <p>Description</p>
                                   <p>Time Slot</p>
 
-                                  <form action="#">
+                                  <form action="Accpet_Event">
                                     <br>
                                     <div class="form-group">
                                       <div class="custom-control custom-radio custom-control-inline">
@@ -442,7 +442,7 @@ s
                                     </div>
                                     <br>
                                     <div class="form-group">
-                                      <input type="" value="Save" class="btn btn-primary" data-dismiss="modal">
+                                      <input type="submit" value="Save" class="btn btn-primary" data-dismiss="modal">
                                     </div>
                                   </form>
 
