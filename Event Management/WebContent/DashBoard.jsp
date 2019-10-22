@@ -36,6 +36,9 @@
     <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/logo.png">
+    <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
     <script>
 
     if ( window.history.replaceState ) {
@@ -44,7 +47,7 @@
     
     </script>
   </head>
-  <body>
+<body>
 		  <%
 		
 			response.setHeader("Cache-Control", "no-cache , no-store , must-revalidate" );
@@ -60,6 +63,9 @@
 		
 		%>
     <!-- navbar-->
+    
+            
+ 
     <header class="header">
       <nav class="navbar navbar-expand-lg px-4 py-2 bg-white shadow">
 
@@ -71,35 +77,107 @@
 
         <a href="#" class="navbar-brand font-weight-bold text-uppercase text-base "><font size="4.6">Welcome  ${username} </font>  </a>
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
-          <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1"><i class="fa fa-bell"></i><span class="notification-icon"></span></a>
-            <div aria-labelledby="notifications" class="dropdown-menu"><a href="#" class="dropdown-item">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-sm bg-violet text-white"><i class="fab fa-twitter"></i></div>
-                  <div class="text ml-2">
-                    <p class="mb-0">You have 2 followers</p>
-                  </div>
-                </div></a><a href="#" class="dropdown-item"> 
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-sm bg-green text-white"><i class="fas fa-envelope"></i></div>
-                  <div class="text ml-2">
-                    <p class="mb-0">You have 6 new messages</p>
-                  </div>
-                </div></a><a href="#" class="dropdown-item">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-sm bg-blue text-white"><i class="fas fa-upload"></i></div>
-                  <div class="text ml-2">
-                    <p class="mb-0">Server rebooted</p>
-                  </div>
-                </div></a><a href="#" class="dropdown-item">
-                <div class="d-flex align-items-center">
-                  <div class="icon icon-sm bg-violet text-white"><i class="fab fa-twitter"></i></div>
-                  <div class="text ml-2">
-                    <p class="mb-0">You have 2 followers</p>
-                  </div>
-                </div></a>
-              <div class="dropdown-divider"></div><a href="#" class="dropdown-item text-center"><small class="font-weight-bold headings-font-family text-uppercase">View all notifications</small></a>
-            </div>
-          </li>
+          <li class="nav-item dropdown mr-3"><a id="notifications" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-gray-400 px-1" onclick="pauseAudio()">
+          <i class="fa fa-bell fa-2x "></i>
+         
+          
+          
+          
+          
+          
+          
+                    <%
+                      		Connection con = null;
+                      		PreparedStatement st  = null;
+                      		ResultSet rs  = null;
+		                
+		                   	
+		                  	try
+		                  	{
+		                  		String sql1 = "select * from event_ledger where username = ? and  status_level != prev_status_level";
+		                  		con = (Connection) GetConnection.getConnection();
+		                  		st = con.prepareStatement(sql1);
+		                  		String Username1 =(String)session.getAttribute("username");
+		                  		
+		                  		
+		                  		st.setString(1,Username1);
+		                  		rs = st.executeQuery();
+		                  		
+		                  		
+		                  		if(rs.absolute(1))
+		                  		{
+		                  			
+
+			                  		sql1 = " update event_ledger set prev_status_level = status_level where username = ? and  status_level != prev_status_level";
+			                  		con = (Connection) GetConnection.getConnection();
+			                  		st = con.prepareStatement(sql1);
+			                  		Username1 =(String)session.getAttribute("username");
+			                  		
+			                  		
+			                  		st.setString(1,Username1);
+			                  		st.executeUpdate();
+			                  		
+			                  		
+		                  			
+		                  		
+		                  	%>
+		                  	 		<audio controls autoplay loop  id="myAudio" style="display:none">
+						         		<source src = "ring.mp3" type = "audio/mp3" />
+						     		 </audio>
+		                  		 <span class="notification-icon" onload="playAudio()"></span></a>
+		                  		  <div aria-labelledby="notifications" class="dropdown-menu"><a href="#" class="dropdown-item">
+					                <div class="d-flex align-items-center">
+					                  <div class="icon icon-sm bg-violet text-white"><i class="fab fa-twitter"></i></div>
+					                  <div class="text ml-2">
+					                 <% if(rs.getInt(5) ==  3) {%>
+					                    <p class="mb-0">Notification from Principal Sir : Permission Granted <%= rs.getString(2) %></p>
+					                    
+					                   <% } %>
+					                   
+					                  <% if(rs.getInt(5) ==  1) {%>
+					                    <p class="mb-0">Event Registration Successfully Done :  Waiting for Principal Response   <%= rs.getString(2) %></p>
+					                    
+					                   <% } %>
+					                   
+					                    <% if(rs.getInt(5) ==  2) {%>
+					                    <p class="mb-0">Notification from Principal Sir : Permission Denied  <%= rs.getString(2) %></p>
+					                    
+					                   <% } %>
+					                   <% if(rs.getInt(5) ==  4) {%>
+					                    <p class="mb-0">Room Booking Successfully Done : Waiting for HOD Response <%= rs.getString(2) %></p>
+					                    
+					                   <% } %>
+					                   <% if(rs.getInt(5) ==  5) {%>
+					                    <p class="mb-0">Permission Granted from HOD Sir regarding : <%= rs.getString(2) %></p>
+					                    
+					                   <% } %>
+					                  </div>
+					                </div></a>
+					              <div class="dropdown-divider"></div><a href="#" class="dropdown-item text-center"><small class="font-weight-bold headings-font-family text-uppercase">View all notifications</small></a>
+					            </div>  
+		                  	
+							                  		 
+		                  	<% 
+		                  	
+		                  		
+		                  	
+		                  		}%><% 
+		                  		
+		                  		
+		                  	}
+		                  	catch(Exception ex)
+		                  	{
+		                  		
+		                  	}
+                  	
+                 	 %>
+          
+          
+          
+          
+          
+        
+	     
           <li class="nav-item dropdown ml-auto"><a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="img/Dp.jpeg" style="max-width: 5.5rem;" class="img-fluid rounded-circle shadow"></a>
             <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">${username}</strong><small>Web Developer</small></a>
               <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Settings</a><a href="#" class="dropdown-item">Activity log       </a>
@@ -158,14 +236,14 @@
                       </thead>
                       <tbody>
                       <%
-                      		Connection con = null;
-                      		PreparedStatement st  = null;
-                      		ResultSet rs  = null;
+                      		 con = null;
+                      		 st  = null;
+                      		 rs  = null;
 		                
 		                   	
 		                  	try
 		                  	{
-		                  		String sql = "select * from event_ledger where username= ? and status_level < 6  order by start_date desc limit 6";
+		                  		String sql = "select * from event_ledger where username= ? and status_level < 6  order by start_date desc ";
 		                  		con = (Connection) GetConnection.getConnection();
 		                  		st = con.prepareStatement(sql);
 		                  		String Username =(String)session.getAttribute("username");
@@ -459,6 +537,40 @@
     </div>
 
     <!-- JavaScript files-->
+    <script>
+var x = document.getElementById("myAudio"); 
+
+function playAudio() { 
+  x.play(); 
+} 
+
+function pauseAudio() { 
+  x.pause(); 
+} 
+
+
+
+var methods = [
+	  "location.reload()",
+	  "history.go(0)",
+
+	  "location.reload(false)"
+	];
+
+	var $body = $("body");
+	for (var i = 0; i < methods.length; ++i) {
+	  (function(cMethod) {
+	    $body.append($("<button>", {
+	      text: cMethod
+	    }).on("click", function() {
+	      eval(cMethod); // don't blame me for using eval
+	    }));
+	  })(methods[0]);
+	}
+</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
